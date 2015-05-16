@@ -1,0 +1,13 @@
+{
+  "title": "Vim Hotkeys",
+  "name": "vim-hotkeys",
+  "version": "0.0.1",
+  "description": "Add basic vim hotkeys for e10s browsing",
+  "main": "index.js",
+  "author": "chimeracoder",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "GPLv3"
+}
