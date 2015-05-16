@@ -1,5 +1,7 @@
+declare var require;
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
+
 var button = buttons.ActionButton({
     id: "mozilla-link",
     label: "Visit Mozilla",
@@ -10,6 +12,7 @@ var button = buttons.ActionButton({
     },
     onClick: handleClick
 });
+
 function handleClick(state) {
     tabs.open("http://www.mozilla.org/");
 }
