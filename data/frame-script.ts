@@ -1,30 +1,51 @@
-declare var jQuery;
-declare var $;
+declare var content;
+declare var addMessageListener;
+declare var sendSyncMessage;
    
-
 const OverlayId = "vim-hotkeys-overlay";
 
 const ModeInsert = "INSERT";
 const ModeNormal = "NORMAL";
 const ModeIgnore = "IGNORE";
 
+
+interface Message {
+    name : string;
+    sync : boolean;
+    json : Object;
+    objects? : Object[];
+}
+
+interface Listener {
+    receiveMessage : (message : Message) => void
+}
+
+class KeypressListener {
+    constructor(){
+    }
+
+    receiveMessage(message : Message) : void {
+        content.console.log("received message", message);
+    }
+}
+
 var currentMode = ModeNormal;
 
 function createOverlay() { 
     // create a new div element 
     // and give it some content 
-    var newDiv = document.createElement("div"); 
-    var newContent = document.createTextNode(currentMode); 
+    var newDiv = content.document.createElement("div"); 
+    var newContent = content.document.createTextNode(currentMode); 
     newDiv.appendChild(newContent); //add the text node to the newly created div. 
     newDiv.id = OverlayId;
 
     // add the newly created element and its content into the DOM 
-    document.body.appendChild(newDiv);
+    content.document.body.appendChild(newDiv);
 }
 createOverlay();
 
 function updateOverlay(){
-    let elem = document.getElementById(OverlayId);
+    let elem = content.document.getElementById(OverlayId);
     elem.innerHTML = currentMode;
 }
 
@@ -34,16 +55,17 @@ function setMode(mode : string){
 }
 
 
+addMessageListener("keypress", new KeypressListener());
 
 
-document.addEventListener("keydown", keyDownTextField, false);
-document.addEventListener("mouseup", handleClick, false);
+content.document.addEventListener("keydown", keyDownTextField, false);
+content.document.addEventListener("mouseup", handleClick, false);
 
 function keyDownTextField(e) {
     var keyCode = e.keyCode;
     if(keyCode==27) {
         // escape
-        document.activeElement["blur"]();
+        content.document.activeElement["blur"]();
         setMode(ModeNormal);
     } else {
         // check if in insert/ignore mode
@@ -52,7 +74,7 @@ function keyDownTextField(e) {
         }
         
         // check if another element has focus
-        if(!(document.activeElement === document.body)){
+        if(!(content.document.activeElement === content.document.body)){
             if(currentMode != ModeInsert){
                 setMode(ModeInsert);
             }
@@ -61,14 +83,14 @@ function keyDownTextField(e) {
 
 
     }
-    console.log(document.activeElement);
-    console.log(document.body);
+    content.console.log(content.document.activeElement);
+    content.console.log(content.document.body);
 
 }
 
 
 function handleClick(e){
-    if(!(document.activeElement === document.body)){
+    if(!(content.document.activeElement === content.document.body)){
         if(currentMode != ModeInsert){
             setMode(ModeInsert);
         }

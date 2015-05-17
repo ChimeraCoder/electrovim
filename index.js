@@ -22,16 +22,25 @@ var showHotKey = Hotkey({
 });
 var hideHotKey = Hotkey({
     combo: "accel-alt-shift-o",
-    onPress: function () {
+    onPress: () => {
+        var tab = tabs.activeTab;
+        var xulTab = require("sdk/view/core").viewFor(tab);
+        var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
+        var browserMM = xulBrowser.messageManager;
+        console.log("sending message");
+        browserMM.sendAsyncMessage("keypress", { "hey": "there" });
     }
 });
 function handleClick(state) {
     tabs.open("http://www.mozilla.org/");
 }
 require("sdk/tabs").on("ready", function (tab) {
-    tab.attach({
-        contentScript: "console.log(document.body.innerHTML);"
-    });
+    var tab = tabs.activeTab;
+    var xulTab = require("sdk/view/core").viewFor(tab);
+    var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
+    var browserMM = xulBrowser.messageManager;
+    console.log("loading", slf.data.url("frame-script.js"));
+    browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
 });
 function onOpen(tab) {
     console.log(tab.url + " is open");
@@ -41,6 +50,7 @@ function onOpen(tab) {
     tab.on("close", logClose);
 }
 function logShow(tab) {
+    // send message to frame script that a new page has been loaded
     console.log(tab.url + " is loaded");
 }
 function logActivate(tab) {
@@ -55,7 +65,5 @@ function logClose(tab) {
 tabs.on('open', onOpen);
 pageMod.PageMod({
     include: ["http://*", "https://*"],
-    contentScriptFile: [data.url("content-script.js"), data.url("jquery.min.js")],
-    contentScriptWhen: "ready",
     contentStyleFile: "./style.css"
 });
