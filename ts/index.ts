@@ -1,11 +1,13 @@
 declare var require;
-declare var data;
 
-var buttons = require('sdk/ui/button/action');
-var tabs = require("sdk/tabs");
-var { Hotkey} = require("sdk/hotkeys");
-var pageMod = require("sdk/page-mod");
-var data = require("sdk/self").data;
+const buttons = require('sdk/ui/button/action');
+const tabs = require("sdk/tabs");
+const { Hotkey} = require("sdk/hotkeys");
+const pageMod = require("sdk/page-mod");
+const slf = require("sdk/self");
+const data = require("sdk/self").data;
+
+
 
 var button = buttons.ActionButton({
     id: "mozilla-link",

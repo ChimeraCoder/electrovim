@@ -28,7 +28,6 @@ function keyDownTextField(e) {
     var keyCode = e.keyCode;
     if (keyCode == 27) {
         // escape
-        console.log("pressed escape");
         document.activeElement["blur"]();
         setMode(ModeNormal);
     }
@@ -37,10 +36,12 @@ function keyDownTextField(e) {
         if (currentMode === ModeInsert) {
             return;
         }
+        // check if another element has focus
         if (!(document.activeElement === document.body)) {
             if (currentMode != ModeInsert) {
                 setMode(ModeInsert);
             }
+            return;
         }
     }
     console.log(document.activeElement);
