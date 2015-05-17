@@ -2,6 +2,7 @@
 declare var content;
 declare var addMessageListener;
 declare var sendSyncMessage;
+declare var sendAsyncMessage;
    
 const OverlayId = "vim-hotkeys-overlay";
 
@@ -38,15 +39,12 @@ function setMode(mode : string){
 }
 
 
-addMessageListener("keypress", new KeypressListener());
-
-
 content.document.addEventListener("keydown", keyDownTextField, false);
 content.document.addEventListener("mouseup", handleClick, false);
 
 function keyDownTextField(e) {
     var keyCode = e.keyCode;
-    if(keyCode==27) {
+    if(keyCode===27) {
         // escape
         content.document.activeElement["blur"]();
         setMode(ModeNormal);
@@ -64,11 +62,15 @@ function keyDownTextField(e) {
             return
         }
 
-
+        // d should close the tab
+        if(keyCode === KeyCodeD){
+            var message = new KeypressMessage(KeyCodeD, {});
+            sendAsyncMessage(message.name, message);
+            return
+        }
     }
     content.console.log(content.document.activeElement);
     content.console.log(content.document.body);
-
 }
 
 

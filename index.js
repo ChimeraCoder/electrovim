@@ -1,9 +1,27 @@
-const buttons = require('sdk/ui/button/action');
-const tabs = require("sdk/tabs");
-const { Hotkey } = require("sdk/hotkeys");
-const pageMod = require("sdk/page-mod");
-const slf = require("sdk/self");
-const data = require("sdk/self").data;
+var KeyCodeD = 68;
+var KeypressListener = (function () {
+    function KeypressListener(receiveMessage) {
+    }
+    KeypressListener.prototype.receiveMessage = function (message) {
+        content.console.log("received message", message);
+        this.receiveMessageFunc(message);
+    };
+    return KeypressListener;
+})();
+var KeypressMessage = (function () {
+    function KeypressMessage(keycode, json) {
+        this.name = "keypress";
+        this.json = json;
+    }
+    return KeypressMessage;
+})();
+/// <reference path="../data/messaging.ts" />
+var buttons = require('sdk/ui/button/action');
+var tabs = require("sdk/tabs");
+var Hotkey = (require("sdk/hotkeys")).Hotkey;
+var pageMod = require("sdk/page-mod");
+var slf = require("sdk/self");
+var data = require("sdk/self").data;
 var button = buttons.ActionButton({
     id: "mozilla-link",
     label: "Visit Mozilla",
@@ -22,7 +40,7 @@ var showHotKey = Hotkey({
 });
 var hideHotKey = Hotkey({
     combo: "accel-alt-shift-o",
-    onPress: () => {
+    onPress: function () {
         var tab = tabs.activeTab;
         var xulTab = require("sdk/view/core").viewFor(tab);
         var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
@@ -41,6 +59,9 @@ require("sdk/tabs").on("ready", function (tab) {
     var browserMM = xulBrowser.messageManager;
     console.log("loading", slf.data.url("frame-script.js"));
     browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
+    browserMM.addMessageListener("keypress", function (message) {
+        closeTab(tab, message);
+    });
 });
 function onOpen(tab) {
     console.log(tab.url + " is open");
@@ -48,6 +69,11 @@ function onOpen(tab) {
     tab.on("activate", logActivate);
     tab.on("deactivate", logDeactivate);
     tab.on("close", logClose);
+}
+function closeTab(tab, message) {
+    console.log("chrome received message", message);
+    console.log("closing tab", tab);
+    tab.close();
 }
 function logShow(tab) {
     // send message to frame script that a new page has been loaded

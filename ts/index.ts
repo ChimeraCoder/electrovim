@@ -1,3 +1,5 @@
+/// <reference path="../data/messaging.ts" />
+
 declare var require;
 
 const buttons = require('sdk/ui/button/action');
@@ -51,6 +53,9 @@ require("sdk/tabs").on("ready", function(tab) {
     var browserMM = xulBrowser.messageManager;
     console.log("loading", slf.data.url("frame-script.js"));
     browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
+    browserMM.addMessageListener("keypress", (message : Message) => {
+        closeTab(tab, message);
+    });
 });
 
 
@@ -60,6 +65,13 @@ function onOpen(tab) {
     tab.on("activate", logActivate);
     tab.on("deactivate", logDeactivate);
     tab.on("close", logClose);
+}
+
+
+function closeTab(tab, message){
+    console.log("chrome received message", message);
+    console.log("closing tab", tab);
+    tab.close();
 }
 
 function logShow(tab) {

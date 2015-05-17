@@ -1,10 +1,19 @@
+var KeyCodeD = 68;
 var KeypressListener = (function () {
-    function KeypressListener() {
+    function KeypressListener(receiveMessage) {
     }
     KeypressListener.prototype.receiveMessage = function (message) {
         content.console.log("received message", message);
+        this.receiveMessageFunc(message);
     };
     return KeypressListener;
+})();
+var KeypressMessage = (function () {
+    function KeypressMessage(keycode, json) {
+        this.name = "keypress";
+        this.json = json;
+    }
+    return KeypressMessage;
 })();
 /// <reference path="./messaging.ts" />
 var OverlayId = "vim-hotkeys-overlay";
@@ -31,12 +40,11 @@ function setMode(mode) {
     currentMode = mode;
     updateOverlay();
 }
-addMessageListener("keypress", new KeypressListener());
 content.document.addEventListener("keydown", keyDownTextField, false);
 content.document.addEventListener("mouseup", handleClick, false);
 function keyDownTextField(e) {
     var keyCode = e.keyCode;
-    if (keyCode == 27) {
+    if (keyCode === 27) {
         // escape
         content.document.activeElement["blur"]();
         setMode(ModeNormal);
@@ -51,6 +59,12 @@ function keyDownTextField(e) {
             if (currentMode != ModeInsert) {
                 setMode(ModeInsert);
             }
+            return;
+        }
+        // d should close the tab
+        if (keyCode === KeyCodeD) {
+            var message = new KeypressMessage(KeyCodeD, {});
+            sendAsyncMessage(message.name, message);
             return;
         }
     }
