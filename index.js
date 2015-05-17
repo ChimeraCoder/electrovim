@@ -28,7 +28,7 @@ var hideHotKey = Hotkey({
         var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
         var browserMM = xulBrowser.messageManager;
         console.log("sending message");
-        browserMM.sendAsyncMessage("keypress", { "hey": "there" });
+        browserMM.sendAsyncMessage("keypress", { "foo": "bar" });
     }
 });
 function handleClick(state) {

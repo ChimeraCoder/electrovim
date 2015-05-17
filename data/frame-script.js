@@ -1,7 +1,3 @@
-var OverlayId = "vim-hotkeys-overlay";
-var ModeInsert = "INSERT";
-var ModeNormal = "NORMAL";
-var ModeIgnore = "IGNORE";
 var KeypressListener = (function () {
     function KeypressListener() {
     }
@@ -10,6 +6,11 @@ var KeypressListener = (function () {
     };
     return KeypressListener;
 })();
+/// <reference path="./messaging.ts" />
+var OverlayId = "vim-hotkeys-overlay";
+var ModeInsert = "INSERT";
+var ModeNormal = "NORMAL";
+var ModeIgnore = "IGNORE";
 var currentMode = ModeNormal;
 function createOverlay() {
     // create a new div element 
@@ -31,7 +32,6 @@ function setMode(mode) {
     updateOverlay();
 }
 addMessageListener("keypress", new KeypressListener());
-content.console.log("asdf");
 content.document.addEventListener("keydown", keyDownTextField, false);
 content.document.addEventListener("mouseup", handleClick, false);
 function keyDownTextField(e) {
