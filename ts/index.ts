@@ -44,11 +44,11 @@ require("sdk/tabs").on("ready", function(tab) {
 
 
 function onOpen(tab) {
-      console.log(tab.url + " is open");
-        tab.on("pageshow", logShow);
-          tab.on("activate", logActivate);
-            tab.on("deactivate", logDeactivate);
-              tab.on("close", logClose);
+    console.log(tab.url + " is open");
+    tab.on("pageshow", logShow);
+    tab.on("activate", logActivate);
+    tab.on("deactivate", logDeactivate);
+    tab.on("close", logClose);
 }
 
 function logShow(tab) {
@@ -72,6 +72,7 @@ tabs.on('open', onOpen);
 pageMod.PageMod({
     include: ["http://*", "https://*"],
     contentScriptFile: [data.url("content-script.js"), data.url("jquery.min.js")],
-    contentScriptWhen: "ready"
-       
+    contentScriptWhen: "ready",
+    contentStyleFile: "./style.css"
+
 });

@@ -55,5 +55,6 @@ tabs.on('open', onOpen);
 pageMod.PageMod({
     include: ["http://*", "https://*"],
     contentScriptFile: [data.url("content-script.js"), data.url("jquery.min.js")],
-    contentScriptWhen: "ready"
+    contentScriptWhen: "ready",
+    contentStyleFile: "./style.css"
 });
