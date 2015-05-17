@@ -1,6 +1,8 @@
 var buttons = require('sdk/ui/button/action');
 var tabs = require("sdk/tabs");
 var Hotkey = (require("sdk/hotkeys")).Hotkey;
+var pageMod = require("sdk/page-mod");
+var data = require("sdk/self").data;
 var button = buttons.ActionButton({
     id: "mozilla-link",
     label: "Visit Mozilla",
@@ -14,13 +16,12 @@ var button = buttons.ActionButton({
 var showHotKey = Hotkey({
     combo: "accel-shift-o",
     onPress: function () {
-        console.log("triggered 1");
+        console.log('active: ' + tabs.activeTab.url);
     }
 });
 var hideHotKey = Hotkey({
     combo: "accel-alt-shift-o",
     onPress: function () {
-        console.log("triggered 2");
     }
 });
 function handleClick(state) {
@@ -30,4 +31,29 @@ require("sdk/tabs").on("ready", function (tab) {
     tab.attach({
         contentScript: "console.log(document.body.innerHTML);"
     });
+});
+function onOpen(tab) {
+    console.log(tab.url + " is open");
+    tab.on("pageshow", logShow);
+    tab.on("activate", logActivate);
+    tab.on("deactivate", logDeactivate);
+    tab.on("close", logClose);
+}
+function logShow(tab) {
+    console.log(tab.url + " is loaded");
+}
+function logActivate(tab) {
+    console.log(tab.url + " is activated");
+}
+function logDeactivate(tab) {
+    console.log(tab.url + " is deactivated");
+}
+function logClose(tab) {
+    console.log(tab.url + " is closed");
+}
+tabs.on('open', onOpen);
+pageMod.PageMod({
+    include: ["http://*", "https://*"],
+    contentScriptFile: [data.url("content-script.js"), data.url("jquery.min.js")],
+    contentScriptWhen: "ready"
 });
