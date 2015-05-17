@@ -2,7 +2,7 @@
   "title": "Vim Hotkeys",
   "name": "vim-hotkeys",
   "version": "0.0.1",
-  "description": "Add basic vim hotkeys for e10s browsing",
+  "description": "Add basic vim hotkeys in Firefox for browsing with e10s (electrolysis) support",
   "main": "index.js",
   "author": "chimeracoder",
   "engines": {

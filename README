@@ -1,0 +1,16 @@
+# Vim Hotkeys
+
+Add basic vim hotkeys to Firefox. Supports multiprocess mode (also known as electrolysis or e10s). 
+
+
+
+### Usage
+
+The current mode (normal or insert) is shown on the bottom right of the window. Clicking inside any input field will automatically enter insert mode. You can leave insert mode by pressing Escape, just like in Vim.
+
+
+When in normal mode, use `d` to close the current tab. 
+
+
+Support for other Vim commands is forthcoming.
+
