@@ -1,7 +1,10 @@
-# Vim Hotkeys
+Vim Hotkeys
+===============
 
 ![](https://raw.githubusercontent.com/ChimeraCoder/vim-hotkeys/master/icon.png)
-Add basic vim hotkeys to Firefox. Supports multiprocess mode (also known as electrolysis or e10s). 
+
+
+Add basic vim hotkeys to Firefox. Supports multiprocess mode (also known as [electrolysis](https://wiki.mozilla.org/Electrolysis) or e10s). 
 
 
 
