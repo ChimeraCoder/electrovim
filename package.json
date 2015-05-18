@@ -1,6 +1,6 @@
 {
-  "title": "Vim Hotkeys",
-  "name": "vim-hotkeys",
+  "title": "electrovim",
+  "name": "electrovim",
   "version": "0.0.1",
   "description": "Add basic vim hotkeys in Firefox for browsing with e10s (electrolysis) support",
   "main": "index.js",

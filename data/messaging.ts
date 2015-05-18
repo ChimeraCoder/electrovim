@@ -1,6 +1,7 @@
 declare var content;
 
 const KeyCodeD = 68;
+const KeyCodeI = 73;
 
 
 interface Message {

@@ -48,29 +48,34 @@ function keyDownTextField(e) {
         // escape
         content.document.activeElement["blur"]();
         setMode(ModeNormal);
-    } else {
-        // check if in insert/ignore mode
-        if(currentMode === ModeInsert){
-            return;
-        }
-        
-        // check if another element has focus
-        if(!(content.document.activeElement === content.document.body)){
-            if(currentMode != ModeInsert){
-                setMode(ModeInsert);
-            }
-            return
-        }
-
-        // d should close the tab
-        if(keyCode === KeyCodeD){
-            var message = new KeypressMessage(KeyCodeD, {});
-            sendAsyncMessage(message.name, message);
-            return
-        }
+        return;
+    } 
+    
+    // check if in insert/ignore mode
+    if(currentMode === ModeInsert || currentMode === ModeIgnore){
+        return;
     }
-    content.console.log(content.document.activeElement);
-    content.console.log(content.document.body);
+
+    // i enters ignore mode
+    if(keyCode===KeyCodeI){
+        setMode(ModeIgnore);
+        return;
+    }
+
+    // check if another element has focus
+    if(!(content.document.activeElement === content.document.body)){
+        if(currentMode != ModeInsert){
+            setMode(ModeInsert);
+        }
+        return;
+    }
+
+    // d should close the tab
+    if(keyCode === KeyCodeD){
+        var message = new KeypressMessage(KeyCodeD, {});
+        sendAsyncMessage(message.name, message);
+        return;
+    }
 }
 
 
