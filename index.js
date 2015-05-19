@@ -1,4 +1,6 @@
 var KeyCodeD = 68;
+var KeyCodeI = 73;
+var KeyCodeForwardSlash = 191;
 var KeypressListener = (function () {
     function KeypressListener(receiveMessage) {
     }
@@ -22,6 +24,7 @@ var Hotkey = (require("sdk/hotkeys")).Hotkey;
 var pageMod = require("sdk/page-mod");
 var slf = require("sdk/self");
 var data = require("sdk/self").data;
+var ui = require("sdk/ui");
 var button = buttons.ActionButton({
     id: "mozilla-link",
     label: "Visit Mozilla",
@@ -32,9 +35,30 @@ var button = buttons.ActionButton({
     },
     onClick: handleClick
 });
+var tabLeft = Hotkey({
+    combo: "control-p",
+    onPress: function () {
+        console.log('active: ' + tabs.activeTab.url);
+        var activeTab = tabs.activeTab;
+        var nextTab = tabs[(activeTab.index - 1) % tabs.length];
+        nextTab.activate();
+        console.log('active: ' + tabs.activeTab.url);
+    }
+});
+var tabLeft = Hotkey({
+    combo: "control-n",
+    onPress: function () {
+        console.log('active: ' + tabs.activeTab.url);
+        var activeTab = tabs.activeTab;
+        var nextTab = tabs[(activeTab.index + 1) % tabs.length];
+        nextTab.activate();
+        console.log('active: ' + tabs.activeTab.url);
+    }
+});
 var showHotKey = Hotkey({
     combo: "accel-shift-o",
     onPress: function () {
+        console.log(tabs);
         console.log('active: ' + tabs.activeTab.url);
     }
 });

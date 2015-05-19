@@ -1,4 +1,6 @@
 var KeyCodeD = 68;
+var KeyCodeI = 73;
+var KeyCodeForwardSlash = 191;
 var KeypressListener = (function () {
     function KeypressListener(receiveMessage) {
     }
@@ -48,28 +50,31 @@ function keyDownTextField(e) {
         // escape
         content.document.activeElement["blur"]();
         setMode(ModeNormal);
+        return;
     }
-    else {
-        // check if in insert/ignore mode
-        if (currentMode === ModeInsert) {
-            return;
+    // check if in insert/ignore mode
+    if (currentMode === ModeInsert || currentMode === ModeIgnore) {
+        return;
+    }
+    // i enters ignore mode
+    if (keyCode === KeyCodeI) {
+        setMode(ModeIgnore);
+        return;
+    }
+    // check if another element has focus
+    if (!(content.document.activeElement === content.document.body)) {
+        if (currentMode != ModeInsert) {
+            setMode(ModeInsert);
         }
-        // check if another element has focus
-        if (!(content.document.activeElement === content.document.body)) {
-            if (currentMode != ModeInsert) {
-                setMode(ModeInsert);
-            }
-            return;
-        }
-        // d should close the tab
-        if (keyCode === KeyCodeD) {
+        return;
+    }
+    switch (keyCode) {
+        case KeyCodeD:
             var message = new KeypressMessage(KeyCodeD, {});
             sendAsyncMessage(message.name, message);
-            return;
-        }
+            break;
+        case KeyCodeForwardSlash:
     }
-    content.console.log(content.document.activeElement);
-    content.console.log(content.document.body);
 }
 function handleClick(e) {
     if (!(content.document.activeElement === content.document.body)) {

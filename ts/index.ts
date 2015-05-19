@@ -9,6 +9,8 @@ const pageMod = require("sdk/page-mod");
 const slf = require("sdk/self");
 const data = require("sdk/self").data;
 
+const ui = require("sdk/ui");
+
 
 
 var button = buttons.ActionButton({
@@ -22,10 +24,30 @@ var button = buttons.ActionButton({
     onClick: handleClick
 });
 
+var tabLeft = Hotkey({
+    combo: "control-p",
+    onPress: function() {
+        var activeTab = tabs.activeTab;
+        var nextTab = tabs[(activeTab.index - 1) % tabs.length];
+        nextTab.activate();
+    }
+});
+
+var tabLeft = Hotkey({
+    combo: "control-n",
+    onPress: function() {
+        var activeTab = tabs.activeTab;
+        var nextTab = tabs[(activeTab.index + 1) % tabs.length];
+        nextTab.activate();
+    }
+});
+
+
 
 var showHotKey = Hotkey({
     combo: "accel-shift-o",
     onPress: function() {
+        console.log(tabs);
         console.log('active: ' + tabs.activeTab.url);
     }
 });

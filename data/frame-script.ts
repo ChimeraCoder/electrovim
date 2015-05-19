@@ -70,11 +70,13 @@ function keyDownTextField(e) {
         return;
     }
 
-    // d should close the tab
-    if(keyCode === KeyCodeD){
-        var message = new KeypressMessage(KeyCodeD, {});
-        sendAsyncMessage(message.name, message);
-        return;
+
+    switch (keyCode){
+        case KeyCodeD:
+            var message = new KeypressMessage(KeyCodeD, {});
+            sendAsyncMessage(message.name, message);
+            break;
+        case KeyCodeForwardSlash:
     }
 }
 

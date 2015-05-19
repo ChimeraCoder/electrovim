@@ -7,5 +7,6 @@ xpi:
 
 clean:
 	rm index.js
+	rm -f data/*.js
 
 .PHONY: ts
