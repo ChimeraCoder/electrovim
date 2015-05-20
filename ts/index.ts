@@ -69,15 +69,28 @@ function handleClick(state) {
 }
 
 require("sdk/tabs").on("ready", function(tab) {
-    var tab = tabs.activeTab;
-    var xulTab = require("sdk/view/core").viewFor(tab);
-    var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
-    var browserMM = xulBrowser.messageManager;
-    console.log("loading", slf.data.url("frame-script.js"));
-    browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
-    browserMM.addMessageListener("keypress", (message : Message) => {
-        closeTab(tab, message);
-    });
+    try {
+        var tab = tabs.activeTab;
+        var xulTab = require("sdk/view/core").viewFor(tab);
+        var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
+        var browserMM = xulBrowser.messageManager;
+        browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
+
+        browserMM.addMessageListener("keypress", (message : Message) => {
+            closeTab(tab, message);
+        });
+
+        browserMM.addMessageListener("log", (message : LogMessage) => {
+            console.log(message.json);
+        });
+    }
+    catch (e){
+        console.log("exception", e);
+        throw e;
+    }
+
+
+
 });
 
 
@@ -118,5 +131,4 @@ tabs.on('open', onOpen);
 pageMod.PageMod({
     include: ["http://*", "https://*"],
     contentStyleFile: "./style.css"
-
 });

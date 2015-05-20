@@ -1,3 +1,4 @@
+var KeyCodeEsc = 27;
 var KeyCodeD = 68;
 var KeyCodeI = 73;
 var KeyCodeForwardSlash = 191;
@@ -16,6 +17,17 @@ var KeypressMessage = (function () {
         this.json = json;
     }
     return KeypressMessage;
+})();
+var LogMessage = (function () {
+    function LogMessage() {
+        var objs = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            objs[_i - 0] = arguments[_i];
+        }
+        this.name = "log";
+        this.json = objs;
+    }
+    return LogMessage;
 })();
 /// <reference path="../data/messaging.ts" />
 var buttons = require('sdk/ui/button/action');
@@ -38,21 +50,17 @@ var button = buttons.ActionButton({
 var tabLeft = Hotkey({
     combo: "control-p",
     onPress: function () {
-        console.log('active: ' + tabs.activeTab.url);
         var activeTab = tabs.activeTab;
         var nextTab = tabs[(activeTab.index - 1) % tabs.length];
         nextTab.activate();
-        console.log('active: ' + tabs.activeTab.url);
     }
 });
 var tabLeft = Hotkey({
     combo: "control-n",
     onPress: function () {
-        console.log('active: ' + tabs.activeTab.url);
         var activeTab = tabs.activeTab;
         var nextTab = tabs[(activeTab.index + 1) % tabs.length];
         nextTab.activate();
-        console.log('active: ' + tabs.activeTab.url);
     }
 });
 var showHotKey = Hotkey({
@@ -77,15 +85,23 @@ function handleClick(state) {
     tabs.open("http://www.mozilla.org/");
 }
 require("sdk/tabs").on("ready", function (tab) {
-    var tab = tabs.activeTab;
-    var xulTab = require("sdk/view/core").viewFor(tab);
-    var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
-    var browserMM = xulBrowser.messageManager;
-    console.log("loading", slf.data.url("frame-script.js"));
-    browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
-    browserMM.addMessageListener("keypress", function (message) {
-        closeTab(tab, message);
-    });
+    try {
+        var tab = tabs.activeTab;
+        var xulTab = require("sdk/view/core").viewFor(tab);
+        var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
+        var browserMM = xulBrowser.messageManager;
+        browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
+        browserMM.addMessageListener("keypress", function (message) {
+            closeTab(tab, message);
+        });
+        browserMM.addMessageListener("log", function (message) {
+            console.log(message.json);
+        });
+    }
+    catch (e) {
+        console.log("exception", e);
+        throw e;
+    }
 });
 function onOpen(tab) {
     console.log(tab.url + " is open");

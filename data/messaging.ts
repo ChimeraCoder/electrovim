@@ -1,5 +1,6 @@
 declare var content;
 
+const KeyCodeEsc = 27;
 const KeyCodeD = 68;
 const KeyCodeI = 73;
 const KeyCodeForwardSlash = 191;
@@ -38,5 +39,17 @@ class KeypressMessage {
     constructor(keycode : number, json){
         this.name = "keypress";
         this.json = json;
+    }
+}
+
+
+class LogMessage {
+    name : string;
+    sync : boolean;
+    json : Object;
+
+    constructor(...objs: any[]){
+        this.name = "log";
+        this.json = objs;
     }
 }
