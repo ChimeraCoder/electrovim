@@ -30,7 +30,6 @@ var LogMessage = (function () {
     return LogMessage;
 })();
 /// <reference path="./messaging.ts" />
-/// <reference path="./search.ts" />
 var OverlayId = "vim-hotkeys-overlay";
 var ModeInsert = "INSERT";
 var ModeNormal = "NORMAL";

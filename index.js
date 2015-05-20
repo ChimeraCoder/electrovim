@@ -37,16 +37,6 @@ var pageMod = require("sdk/page-mod");
 var slf = require("sdk/self");
 var data = require("sdk/self").data;
 var ui = require("sdk/ui");
-var button = buttons.ActionButton({
-    id: "mozilla-link",
-    label: "Visit Mozilla",
-    icon: {
-        "16": "./icon-16.png",
-        "32": "./icon-32.png",
-        "64": "./icon-64.png"
-    },
-    onClick: handleClick
-});
 var tabLeft = Hotkey({
     combo: "control-p",
     onPress: function () {
@@ -61,46 +51,6 @@ var tabLeft = Hotkey({
         var activeTab = tabs.activeTab;
         var nextTab = tabs[(activeTab.index + 1) % tabs.length];
         nextTab.activate();
-    }
-});
-var showHotKey = Hotkey({
-    combo: "accel-shift-o",
-    onPress: function () {
-        console.log(tabs);
-        console.log('active: ' + tabs.activeTab.url);
-    }
-});
-var hideHotKey = Hotkey({
-    combo: "accel-alt-shift-o",
-    onPress: function () {
-        var tab = tabs.activeTab;
-        var xulTab = require("sdk/view/core").viewFor(tab);
-        var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
-        var browserMM = xulBrowser.messageManager;
-        console.log("sending message");
-        browserMM.sendAsyncMessage("keypress", { "foo": "bar" });
-    }
-});
-function handleClick(state) {
-    tabs.open("http://www.mozilla.org/");
-}
-require("sdk/tabs").on("ready", function (tab) {
-    try {
-        var tab = tabs.activeTab;
-        var xulTab = require("sdk/view/core").viewFor(tab);
-        var xulBrowser = require("sdk/tabs/utils").getBrowserForTab(xulTab);
-        var browserMM = xulBrowser.messageManager;
-        browserMM.loadFrameScript(slf.data.url("frame-script.js"), false);
-        browserMM.addMessageListener("keypress", function (message) {
-            closeTab(tab, message);
-        });
-        browserMM.addMessageListener("log", function (message) {
-            console.log(message.json);
-        });
-    }
-    catch (e) {
-        console.log("exception", e);
-        throw e;
     }
 });
 function onOpen(tab) {
@@ -131,5 +81,16 @@ function logClose(tab) {
 tabs.on('open', onOpen);
 pageMod.PageMod({
     include: ["http://*", "https://*"],
-    contentStyleFile: "./style.css"
+    contentStyleFile: "./style.css",
+    contentScriptFile: [slf.data.url("jquery-2.1.4.min.js"), slf.data.url("frame-script.js")],
+    contentScriptWhen: "ready",
+    onAttach: function (worker) {
+        worker.port.on("keypress", function (message) {
+            var tab = tabs.activeTab;
+            closeTab(tab, message);
+        });
+        worker.port.on("log", function (message) {
+            console.log(message.json);
+        });
+    }
 });

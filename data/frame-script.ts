@@ -1,5 +1,4 @@
 /// <reference path="./messaging.ts" />
-/// <reference path="./search.ts" />
 declare var content;
 declare var addMessageListener;
 declare var sendSyncMessage;
