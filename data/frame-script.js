@@ -39,6 +39,10 @@ var ModeFind = "FIND";
 var currentMode = ModeNormal;
 var findBuffer = "";
 function createOverlay() {
+    // set the correct initial mode
+    if (content.document.activeElement !== document.body) {
+        currentMode = ModeInsert;
+    }
     // create a new div element 
     // and give it some content 
     var newDiv = content.document.createElement("div");
