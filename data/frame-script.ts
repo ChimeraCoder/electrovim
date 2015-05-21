@@ -82,13 +82,6 @@ function keyDownTextField(e) {
             return;
         }
 
-        // forward slash enters find mode
-        if(keyCode === KeyCodeForwardSlash){
-            setMode(ModeFind);
-            findBuffer = "";
-            e.preventDefault()
-                return;
-        }
 
         // i enters ignore mode
         if(keyCode===KeyCodeI){

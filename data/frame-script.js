@@ -87,20 +87,10 @@ function keyDownTextField(e) {
             updateOverlay();
             log(findBuffer);
             var body = $("body");
-            content.console.log("jkl;");
-            content.console.log("body is ", body);
-            content.console.log("$ is ", $);
             highlight(body, findBuffer);
         }
         // check if in insert/ignore mode
         if (currentMode !== ModeNormal) {
-            return;
-        }
-        // forward slash enters find mode
-        if (keyCode === KeyCodeForwardSlash) {
-            setMode(ModeFind);
-            findBuffer = "";
-            e.preventDefault();
             return;
         }
         // i enters ignore mode
@@ -118,7 +108,7 @@ function keyDownTextField(e) {
         switch (keyCode) {
             case KeyCodeD:
                 var message = new KeypressMessage(KeyCodeD, {});
-                sendAsyncMessage(message.name, message);
+                self["port"].emit(message.name, message);
                 break;
             case KeyCodeForwardSlash:
         }
