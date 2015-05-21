@@ -1,3 +1,4 @@
+/// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
 declare var content;
 declare var addMessageListener;
@@ -10,8 +11,6 @@ const ModeInsert = "INSERT";
 const ModeNormal = "NORMAL";
 const ModeIgnore = "IGNORE";
 const ModeFind = "FIND";
-
-declare var $;
 
 var currentMode = ModeNormal;
 
@@ -74,14 +73,8 @@ function keyDownTextField(e) {
             content.console.log("findBuffer", findBuffer);
             updateOverlay();
             log(findBuffer);
-            content.console.log("asdf");
-            content.console.log("foo is", content.document.querySelector("body"));
-            var body = content.document.querySelector("body");
-            content.console.log("jkl;");
-            content.console.log("body is ", body);
-            content.console.log("$ is ", $);
-            highlight(body, findBuffer, "highlight-cls")
-                return;
+            var body = $("body");
+            highlight(body, findBuffer)
         }
 
         // check if in insert/ignore mode
@@ -132,7 +125,7 @@ function keyDownTextField(e) {
 
 var log = function(...objs: any[]){
     var message = new (Array.bind.apply(LogMessage, [null].concat(objs)));
-    sendAsyncMessage(message.name, message);
+    self["port"].emit(message.name, message);
 }
 
 
@@ -160,10 +153,42 @@ function isCharPrintable(keycode : number) : boolean {
 
 
 
-
-var highlight = function (node, str, className) {
-    var regex = new RegExp(str, "gi");
-    node.innerHTML = node.innerHTML.replace(regex, function(matched) {
-        return "<span class=\"" + className + "\">" + matched + "</span>";
-    });
+var highlight = function(node, str) {
+    try {
+        var containsQuery = '*:contains("' + str + '")';
+        $(containsQuery).each(function(){
+            if($(this).children().length < 1) {
+              var re = new RegExp("(" + str + ")", "g");
+              var txt = $(this).text();
+              $(this).replaceWith(txt.replace(re, '<span class="highlight">$1</span>'));
+            }
+        });
+    }
+    catch (e){
+        content.console.log("exception: ", e);
+        throw e;
+    }
 };
+
+var removeHighlights = function(){
+    jQuery("span.highlight").each((index, elem) => {
+        elem.parentNode.firstChild.nodeName;
+        elem.parentNode.replaceChild(elem.firstChild, elem);
+        elem.parentNode.normalize();
+        return elem;
+    }).end();
+
+    return;
+    try {
+        jQuery(".highlight").each((index, elem) => {
+            return $(elem).replaceWith(() => {
+                return $($(elem).contents().get(0));
+            })
+        })
+    } 
+    catch (e) {
+        content.console.log("exception: ", e);
+        throw e;
+    }
+
+}
