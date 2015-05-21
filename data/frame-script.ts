@@ -101,7 +101,7 @@ function keyDownTextField(e) {
         switch (keyCode){
             case KeyCodeD:
                 var message = new KeypressMessage(KeyCodeD, {});
-                sendAsyncMessage(message.name, message);
+                self["port"].emit(message.name, message)
                 break;
             case KeyCodeForwardSlash:
         }
