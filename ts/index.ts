@@ -32,6 +32,25 @@ var tabLeft = Hotkey({
 });
 
 
+var pagedown = Hotkey({
+    combo: "control-f",
+    onPress: function() {
+        const activeTab = tabs.activeTab;
+        const worker = activeTab.attach({
+            contentScript: 'self.port.emit("pagedown", {});'
+        });
+    }
+});
+
+var pageup = Hotkey({
+    combo: "control-b",
+    onPress: function() {
+        var activeTab = tabs.activeTab;
+        var nextTab = tabs[(activeTab.index + 1) % tabs.length];
+        nextTab.activate();
+    }
+});
+
 function onOpen(tab) {
     console.log(tab.url + " is open");
     tab.on("pageshow", logShow);
