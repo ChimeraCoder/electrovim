@@ -13,7 +13,7 @@ Add basic vim hotkeys to Firefox. Supports multiprocess mode (also known as [ele
 The current mode (normal or insert) is shown on the bottom right of the window. Clicking inside any input field will automatically enter insert mode. You can leave insert mode by pressing Escape, just like in Vim.
 
 
-When in normal mode, use `d` to close the current tab. 
+When in normal mode, use `d` to close the current tab. `CTRL+n` and `CTRL+p` switch to the next and previous tab, respectively. `CTRL+f` and `CTRL+b` are the equivalent of page up/page down.
 
 
 Support for other Vim commands is forthcoming.
