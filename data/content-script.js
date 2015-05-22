@@ -57,7 +57,6 @@ function createOverlay() {
     // add the newly created element and its content into the DOM 
     content.document.body.appendChild(newDiv);
 }
-createOverlay();
 function updateOverlay() {
     var elem = content.document.getElementById(OverlayId);
     if (currentMode !== ModeFind) {
@@ -75,8 +74,6 @@ function setMode(mode) {
 function stealFocus() {
     content.document.activeElement["blur"]();
 }
-content.document.addEventListener("keydown", keyDownTextField, false);
-content.document.addEventListener("mouseup", handleClick, false);
 function keyDownTextField(e) {
     try {
         var keyCode = e.keyCode;
@@ -92,11 +89,9 @@ function keyDownTextField(e) {
                 return;
             }
             findBuffer += String.fromCharCode(keyCode).toLowerCase();
-            content.console.log("findBuffer", findBuffer);
             updateOverlay();
             log(findBuffer);
             var body = $("body");
-            highlight(body, findBuffer);
         }
         // check if in insert/ignore mode
         if (currentMode !== ModeNormal) {
@@ -128,19 +123,13 @@ function keyDownTextField(e) {
         throw e;
     }
 }
-self["port"].on("pagedown", function () {
+function pageup() {
+    $(document).scrollTop($(document).scrollTop() - $(window).height());
+}
+function pagedown() {
     $(document).scrollTop($(document).scrollTop() + $(window).height());
-});
-self["port"].on("pageup", function () {
-    content.console.log("paging up");
-    try {
-        $(document).scrollTop($(document).scrollTop() - $(window).height());
-    }
-    catch (e) {
-        content.console.log("exception: ", e);
-        throw e;
-    }
-});
+}
+// log to extension console
 function log() {
     var objs = [];
     for (var _i = 0; _i < arguments.length; _i++) {
@@ -165,40 +154,8 @@ function isCharPrintable(keycode) {
         (keycode > 218 && keycode < 223); // [\]' (in order)
     return valid;
 }
-function highlight(node, str) {
-    try {
-        var containsQuery = '*:contains("' + str + '")';
-        $(containsQuery).each(function () {
-            if ($(this).children().length < 1) {
-                var re = new RegExp("(" + str + ")", "g");
-                var txt = $(this).text();
-                $(this).replaceWith(txt.replace(re, '<span class="highlight">$1</span>'));
-            }
-        });
-    }
-    catch (e) {
-        content.console.log("exception: ", e);
-        throw e;
-    }
-}
-;
-var removeHighlights = function () {
-    jQuery("span.highlight").each(function (index, elem) {
-        elem.parentNode.firstChild.nodeName;
-        elem.parentNode.replaceChild(elem.firstChild, elem);
-        elem.parentNode.normalize();
-        return elem;
-    }).end();
-    return;
-    try {
-        jQuery(".highlight").each(function (index, elem) {
-            return $(elem).replaceWith(function () {
-                return $($(elem).contents().get(0));
-            });
-        });
-    }
-    catch (e) {
-        content.console.log("exception: ", e);
-        throw e;
-    }
-};
+createOverlay();
+content.document.addEventListener("keydown", keyDownTextField, false);
+content.document.addEventListener("mouseup", handleClick, false);
+self["port"].on("pagedown", pagedown);
+self["port"].on("pageup", pageup);

@@ -39,7 +39,6 @@ function createOverlay() {
     // add the newly created element and its content into the DOM 
     content.document.body.appendChild(newDiv);
 }
-createOverlay();
 
 function updateOverlay(){
     let elem = content.document.getElementById(OverlayId);
@@ -61,8 +60,6 @@ function stealFocus(){
 }
 
 
-content.document.addEventListener("keydown", keyDownTextField, false);
-content.document.addEventListener("mouseup", handleClick, false);
 
 
 function keyDownTextField(e) {
@@ -82,11 +79,10 @@ function keyDownTextField(e) {
                 return;
             }
             findBuffer += String.fromCharCode(keyCode).toLowerCase();
-            content.console.log("findBuffer", findBuffer);
             updateOverlay();
             log(findBuffer);
             const body = $("body");
-            highlight(body, findBuffer)
+            // TODO highlight
         }
 
         // check if in insert/ignore mode
@@ -128,21 +124,17 @@ function keyDownTextField(e) {
 
 
 
-self["port"].on("pagedown", function(){
+
+
+function pageup(){
+    $(document).scrollTop($(document).scrollTop()-$(window).height());
+}
+
+function pagedown(){
     $(document).scrollTop($(document).scrollTop()+$(window).height());
-});
+}
 
-self["port"].on("pageup", function(){
-    content.console.log("paging up");
-    try{ 
-        $(document).scrollTop($(document).scrollTop()-$(window).height());
-    }
-    catch (e){
-        content.console.log("exception: ", e);
-        throw e;
-    }
-});
-
+// log to extension console
 function log(...objs: any[]){
     const message = new (Array.bind.apply(LogMessage, [null].concat(objs)));
     self["port"].emit(message.name, message);
@@ -171,44 +163,9 @@ function isCharPrintable(keycode : number) : boolean {
     return valid;
 }
 
+createOverlay();
+content.document.addEventListener("keydown", keyDownTextField, false);
+content.document.addEventListener("mouseup", handleClick, false);
 
-
-function highlight(node, str) {
-    try {
-        const containsQuery = '*:contains("' + str + '")';
-        $(containsQuery).each(function(){
-            if($(this).children().length < 1) {
-              const re = new RegExp("(" + str + ")", "g");
-              const txt = $(this).text();
-              $(this).replaceWith(txt.replace(re, '<span class="highlight">$1</span>'));
-            }
-        });
-    }
-    catch (e){
-        content.console.log("exception: ", e);
-        throw e;
-    }
-};
-
-const removeHighlights = function(){
-    jQuery("span.highlight").each((index, elem) => {
-        elem.parentNode.firstChild.nodeName;
-        elem.parentNode.replaceChild(elem.firstChild, elem);
-        elem.parentNode.normalize();
-        return elem;
-    }).end();
-
-    return;
-    try {
-        jQuery(".highlight").each((index, elem) => {
-            return $(elem).replaceWith(() => {
-                return $($(elem).contents().get(0));
-            })
-        })
-    } 
-    catch (e) {
-        content.console.log("exception: ", e);
-        throw e;
-    }
-
-}
+self["port"].on("pagedown", pagedown);
+self["port"].on("pageup", pageup);
