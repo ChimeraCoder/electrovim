@@ -4,7 +4,12 @@ Electrovim
 ![](https://raw.githubusercontent.com/ChimeraCoder/electrovim/master/electrovim-128.png)
 
 
-Add basic vim hotkeys to Firefox. Supports multiprocess mode (also known as [electrolysis](https://wiki.mozilla.org/Electrolysis) or e10s). 
+Electrovim adds Vim keybindings to Firefox. It supports multiprocess mode (also known as [electrolysis](https://wiki.mozilla.org/Electrolysis) or e10s). 
+
+
+### Installation
+
+Electrovim can be installed from the [Firefox Add-ons marketplace](https://addons.mozilla.org/en-US/firefox/addon/electrovim/)
 
 
 
