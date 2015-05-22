@@ -84,7 +84,7 @@ function closeTab(tab, message) {
 pageMod.PageMod({
     include: ["http://*", "https://*"],
     contentStyleFile: "./style.css",
-    contentScriptFile: [slf.data.url("jquery-1.11.3.min.js"), slf.data.url("jquery-highlight.js"), slf.data.url("content-script.js")],
+    contentScriptFile: [slf.data.url("jquery-1.11.3.min.js"), slf.data.url("content-script.js")],
     contentScriptWhen: "ready",
     onAttach: function (worker) {
         if (!worker.tab) {
