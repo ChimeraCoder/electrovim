@@ -46,20 +46,13 @@ var tabLeft = Hotkey({
         nextTab.activate();
     }
 });
-var tabLeft = Hotkey({
+var tabRight = Hotkey({
     combo: "control-n",
     onPress: function () {
         var activeTab = tabs.activeTab;
         var nextTab = tabs[(activeTab.index + 1) % tabs.length];
         nextTab.activate();
     }
-});
-var pageDownScript = '$(document).scrollTop($(document).scrollTop()+$(window).height());';
-tabs.on("ready", function (tab) {
-    var worker = tab.attach({
-        contentScript: pageDownScript
-    });
-    console.log("injected into", tab);
 });
 var pagedown = Hotkey({
     combo: "control-f",

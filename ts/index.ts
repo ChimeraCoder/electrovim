@@ -14,7 +14,7 @@ const ui = require("sdk/ui");
 
 const tabWorkers = new WeakMap();
 
-var tabLeft = Hotkey({
+const tabLeft = Hotkey({
     combo: "control-p",
     onPress: function() {
         var activeTab = tabs.activeTab;
@@ -23,7 +23,7 @@ var tabLeft = Hotkey({
     }
 });
 
-var tabLeft = Hotkey({
+const tabRight = Hotkey({
     combo: "control-n",
     onPress: function() {
         var activeTab = tabs.activeTab;
@@ -32,19 +32,7 @@ var tabLeft = Hotkey({
     }
 });
 
-
-
-
-const pageDownScript = '$(document).scrollTop($(document).scrollTop()+$(window).height());';
-
-tabs.on("ready", function(tab) {
-    const worker = tab.attach({
-        contentScript: pageDownScript
-    });
-    console.log("injected into", tab)
-});
-
-var pagedown = Hotkey({
+const pagedown = Hotkey({
     combo: "control-f",
     onPress: function() {
         const activeTab = tabs.activeTab;
@@ -56,7 +44,7 @@ var pagedown = Hotkey({
     }
 });
 
-var pageup = Hotkey({
+const pageup = Hotkey({
     combo: "control-b",
     onPress: function() {
         const activeTab = tabs.activeTab;
