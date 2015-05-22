@@ -31,7 +31,7 @@ var LogMessage = (function () {
 })();
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
-var OverlayId = "vim-hotkeys-overlay";
+var OverlayId = "electrovim-overlay";
 var ModeInsert = "INSERT";
 var ModeNormal = "NORMAL";
 var ModeIgnore = "IGNORE";

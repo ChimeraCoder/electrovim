@@ -5,7 +5,7 @@ declare var addMessageListener;
 declare var sendSyncMessage;
 declare var sendAsyncMessage;
 
-const OverlayId = "vim-hotkeys-overlay";
+const OverlayId = "electrovim-overlay";
 
 const ModeInsert = "INSERT";
 const ModeNormal = "NORMAL";

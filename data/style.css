@@ -1,10 +1,14 @@
-#vim-hotkeys-overlay{
-    background: yellow;
+#electrovim-overlay{
+    background: hsla(60, 100%, 50%, 0.5);
     position: fixed;
     top:auto;
     bottom:0;
     right:0;
+
+    font: 12px/14px sans-serif;
+    color: black;
 }
+
 
 .highlight { 
     background-color: yellow;
