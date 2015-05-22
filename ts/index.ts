@@ -1,6 +1,6 @@
 /// <reference path="../data/messaging.ts" />
 
-declare var require;
+declare const require;
 
 const buttons = require('sdk/ui/button/action');
 const tabs = require("sdk/tabs");
@@ -17,8 +17,8 @@ const tabWorkers = new WeakMap();
 const tabLeft = Hotkey({
     combo: "control-p",
     onPress: function() {
-        var activeTab = tabs.activeTab;
-        var nextTab = tabs[(activeTab.index - 1) % tabs.length];
+        const activeTab = tabs.activeTab;
+        const nextTab = tabs[(activeTab.index - 1) % tabs.length];
         nextTab.activate();
     }
 });
@@ -26,8 +26,8 @@ const tabLeft = Hotkey({
 const tabRight = Hotkey({
     combo: "control-n",
     onPress: function() {
-        var activeTab = tabs.activeTab;
-        var nextTab = tabs[(activeTab.index + 1) % tabs.length];
+        const activeTab = tabs.activeTab;
+        const nextTab = tabs[(activeTab.index + 1) % tabs.length];
         nextTab.activate();
     }
 });
@@ -56,14 +56,6 @@ const pageup = Hotkey({
     }
 });
 
-function onOpen(tab) {
-    console.log(tab.url + " is open");
-    tab.on("pageshow", logShow);
-    tab.on("activate", logActivate);
-    tab.on("deactivate", logDeactivate);
-    tab.on("close", logClose);
-}
-
 
 function closeTab(tab, message){
     console.log("chrome received message", message);
@@ -71,24 +63,6 @@ function closeTab(tab, message){
     tab.close();
 }
 
-function logShow(tab) {
-    // send message to frame script that a new page has been loaded
-    console.log(tab.url + " is loaded");
-}
-
-function logActivate(tab) {
-      console.log(tab.url + " is activated");
-}
-
-function logDeactivate(tab) {
-      console.log(tab.url + " is deactivated");
-}
-
-function logClose(tab) {
-      console.log(tab.url + " is closed");
-}
-
-tabs.on('open', onOpen);
 
 pageMod.PageMod({
     include: ["http://*", "https://*"],
@@ -101,7 +75,7 @@ pageMod.PageMod({
         }
         tabWorkers.set(worker.tab, worker);
         worker.port.on("keypress", (message : Message) => {
-            var tab = tabs.activeTab;
+            const tab = tabs.activeTab;
             closeTab(tab, message);
         });
 
