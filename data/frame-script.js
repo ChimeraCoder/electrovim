@@ -123,6 +123,19 @@ function keyDownTextField(e) {
         throw e;
     }
 }
+self["port"].on("pagedown", function () {
+    $(document).scrollTop($(document).scrollTop() + $(window).height());
+});
+self["port"].on("pageup", function () {
+    content.console.log("paging up");
+    try {
+        $(document).scrollTop($(document).scrollTop() - $(window).height());
+    }
+    catch (e) {
+        content.console.log("exception: ", e);
+        throw e;
+    }
+});
 var log = function () {
     var objs = [];
     for (var _i = 0; _i < arguments.length; _i++) {

@@ -12,6 +12,7 @@ const data = require("sdk/self").data;
 const ui = require("sdk/ui");
 
 
+const tabWorkers = new WeakMap();
 
 var tabLeft = Hotkey({
     combo: "control-p",
@@ -31,6 +32,41 @@ var tabLeft = Hotkey({
     }
 });
 
+
+
+
+const pageDownScript = '$(document).scrollTop($(document).scrollTop()+$(window).height());';
+
+tabs.on("ready", function(tab) {
+    const worker = tab.attach({
+        contentScript: pageDownScript
+    });
+    console.log("injected into", tab)
+});
+
+var pagedown = Hotkey({
+    combo: "control-f",
+    onPress: function() {
+        const activeTab = tabs.activeTab;
+        if(!tabWorkers.has(activeTab)){
+            console.log("tab has no worker!", activeTab);
+        }
+        const worker : any = tabWorkers.get(activeTab);
+        worker.port.emit("pagedown", {});
+    }
+});
+
+var pageup = Hotkey({
+    combo: "control-b",
+    onPress: function() {
+        const activeTab = tabs.activeTab;
+        if(!tabWorkers.has(activeTab)){
+            console.log("tab has no worker!", activeTab);
+        }
+        const worker : any = tabWorkers.get(activeTab);
+        worker.port.emit("pageup", {});
+    }
+});
 
 function onOpen(tab) {
     console.log(tab.url + " is open");
@@ -72,6 +108,10 @@ pageMod.PageMod({
     contentScriptFile: [slf.data.url("jquery-1.11.3.min.js"), slf.data.url("jquery-highlight.js"), slf.data.url("frame-script.js")],
     contentScriptWhen: "ready",
     onAttach: function(worker){
+        if(!worker.tab){
+            console.log("worker has no tab!", worker);
+        }
+        tabWorkers.set(worker.tab, worker);
         worker.port.on("keypress", (message : Message) => {
             var tab = tabs.activeTab;
             closeTab(tab, message);

@@ -121,6 +121,21 @@ function keyDownTextField(e) {
 
 
 
+self["port"].on("pagedown", function(){
+    $(document).scrollTop($(document).scrollTop()+$(window).height());
+});
+
+self["port"].on("pageup", function(){
+    content.console.log("paging up");
+    try{ 
+        $(document).scrollTop($(document).scrollTop()-$(window).height());
+    }
+    catch (e){
+        content.console.log("exception: ", e);
+        throw e;
+    }
+});
+
 var log = function(...objs: any[]){
     var message = new (Array.bind.apply(LogMessage, [null].concat(objs)));
     self["port"].emit(message.name, message);
