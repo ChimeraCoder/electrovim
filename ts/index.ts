@@ -18,8 +18,15 @@ const tabLeft = Hotkey({
     combo: "control-p",
     onPress: function() {
         const activeTab = tabs.activeTab;
-        const nextTab = tabs[(activeTab.index - 1) % tabs.length];
-        nextTab.activate();
+        const activeTabIndex = activeTab.index;
+        const targetIndex = ((activeTabIndex - 1) + tabs.length)  % tabs.length;
+        for(let tab of tabs){
+            if(tab.index === targetIndex ){
+                tab.activate();
+                return;
+            }
+        }
+        console.log("could not find tab with index ", targetIndex);
     }
 });
 
@@ -27,8 +34,15 @@ const tabRight = Hotkey({
     combo: "control-n",
     onPress: function() {
         const activeTab = tabs.activeTab;
-        const nextTab = tabs[(activeTab.index + 1) % tabs.length];
-        nextTab.activate();
+        const activeTabIndex = activeTab.index;
+        const targetIndex = (activeTabIndex + 1) % tabs.length;
+        for(let tab of tabs){
+            if(tab.index === targetIndex ){
+                tab.activate();
+                return;
+            }
+        }
+        console.log("could not find tab with index ", targetIndex);
     }
 });
 

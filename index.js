@@ -42,16 +42,32 @@ var tabLeft = Hotkey({
     combo: "control-p",
     onPress: function () {
         var activeTab = tabs.activeTab;
-        var nextTab = tabs[(activeTab.index - 1) % tabs.length];
-        nextTab.activate();
+        var activeTabIndex = activeTab.index;
+        var targetIndex = ((activeTabIndex - 1) + tabs.length) % tabs.length;
+        for (var _i = 0; _i < tabs.length; _i++) {
+            var tab = tabs[_i];
+            if (tab.index === targetIndex) {
+                tab.activate();
+                return;
+            }
+        }
+        console.log("could not find tab with index ", targetIndex);
     }
 });
 var tabRight = Hotkey({
     combo: "control-n",
     onPress: function () {
         var activeTab = tabs.activeTab;
-        var nextTab = tabs[(activeTab.index + 1) % tabs.length];
-        nextTab.activate();
+        var activeTabIndex = activeTab.index;
+        var targetIndex = (activeTabIndex + 1) % tabs.length;
+        for (var _i = 0; _i < tabs.length; _i++) {
+            var tab = tabs[_i];
+            if (tab.index === targetIndex) {
+                tab.activate();
+                return;
+            }
+        }
+        console.log("could not find tab with index ", targetIndex);
     }
 });
 var pagedown = Hotkey({
