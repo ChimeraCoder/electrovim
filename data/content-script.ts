@@ -22,10 +22,17 @@ function createOverlay() {
         currentMode = ModeInsert;
     }
 
+    // check if an overlay already exists
+    if(content.document.getElementById(OverlayId)){
+        updateOverlay();
+        return
+    }
+
+
     // create a new div element 
     // and give it some content 
-    var newDiv = content.document.createElement("div"); 
-    var newContent = content.document.createTextNode(currentMode); 
+    const newDiv = content.document.createElement("div"); 
+    const newContent = content.document.createTextNode(currentMode); 
     newDiv.appendChild(newContent); //add the text node to the newly created div. 
     newDiv.id = OverlayId;
 
@@ -37,9 +44,9 @@ createOverlay();
 function updateOverlay(){
     let elem = content.document.getElementById(OverlayId);
     if(currentMode !== ModeFind){
-        elem.innerHTML = currentMode;
+        elem.textContent= currentMode;
     } else {
-        elem.innerHTML = currentMode + ": " + findBuffer;
+        elem.textContent= currentMode + ": " + findBuffer;
     }
 }
 
@@ -60,7 +67,7 @@ content.document.addEventListener("mouseup", handleClick, false);
 
 function keyDownTextField(e) {
     try{
-        var keyCode = e.keyCode;
+        const keyCode = e.keyCode;
 
         if(keyCode === KeyCodeEsc) {
             stealFocus();
@@ -78,7 +85,7 @@ function keyDownTextField(e) {
             content.console.log("findBuffer", findBuffer);
             updateOverlay();
             log(findBuffer);
-            var body = $("body");
+            const body = $("body");
             highlight(body, findBuffer)
         }
 
@@ -105,7 +112,7 @@ function keyDownTextField(e) {
 
         switch (keyCode){
             case KeyCodeD:
-                var message = new KeypressMessage(KeyCodeD, {});
+                const message = new KeypressMessage(KeyCodeD, {});
                 self["port"].emit(message.name, message)
                 break;
             case KeyCodeForwardSlash:
@@ -136,8 +143,8 @@ self["port"].on("pageup", function(){
     }
 });
 
-var log = function(...objs: any[]){
-    var message = new (Array.bind.apply(LogMessage, [null].concat(objs)));
+function log(...objs: any[]){
+    const message = new (Array.bind.apply(LogMessage, [null].concat(objs)));
     self["port"].emit(message.name, message);
 }
 
@@ -153,7 +160,7 @@ function handleClick(e){
 
 
 function isCharPrintable(keycode : number) : boolean {
-    var valid = 
+    const valid = 
         (keycode > 47 && keycode < 58)   || // number keys
         keycode == 32 || keycode == 13   || // spacebar & return key(s) (if you want to allow carriage returns)
         (keycode > 64 && keycode < 91)   || // letter keys
@@ -166,13 +173,13 @@ function isCharPrintable(keycode : number) : boolean {
 
 
 
-var highlight = function(node, str) {
+function highlight(node, str) {
     try {
-        var containsQuery = '*:contains("' + str + '")';
+        const containsQuery = '*:contains("' + str + '")';
         $(containsQuery).each(function(){
             if($(this).children().length < 1) {
-              var re = new RegExp("(" + str + ")", "g");
-              var txt = $(this).text();
+              const re = new RegExp("(" + str + ")", "g");
+              const txt = $(this).text();
               $(this).replaceWith(txt.replace(re, '<span class="highlight">$1</span>'));
             }
         });
@@ -183,7 +190,7 @@ var highlight = function(node, str) {
     }
 };
 
-var removeHighlights = function(){
+const removeHighlights = function(){
     jQuery("span.highlight").each((index, elem) => {
         elem.parentNode.firstChild.nodeName;
         elem.parentNode.replaceChild(elem.firstChild, elem);
