@@ -124,14 +124,20 @@ function keyDownTextField(e) {
 
 
 
+function windowHeight() : number {
+    if (document.compatMode === 'BackCompat') {
+        return document.body.clientHeight;
+    }
+    return $(window).height();
+}
 
 
 function pageup(){
-    $(document).scrollTop($(document).scrollTop()-$(window).height());
+    $(document).scrollTop($(document).scrollTop()-windowHeight());
 }
 
 function pagedown(){
-    $(document).scrollTop($(document).scrollTop()+$(window).height());
+    $(document).scrollTop($(document).scrollTop()+windowHeight());
 }
 
 // log to extension console
