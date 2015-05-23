@@ -234,7 +234,7 @@ function pagedown() {
     $(document).scrollTop($(document).scrollTop() + windowHeight());
 }
 function scrollToElement(element) {
-    $("html, body").animate({ scrollTop: $(element).offset().top }, 50);
+    $(document).scrollTop($(element).offset().top);
 }
 // log to extension console
 function log() {
