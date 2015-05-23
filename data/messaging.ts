@@ -1,7 +1,9 @@
 declare var content;
 
+const KeyCodeShift = 16;
 const KeyCodeEsc = 27;
 const KeyCodeD = 68;
+const KeyCodeG = 71;
 const KeyCodeI = 73;
 const KeyCodeN = 78;
 const KeyCodeForwardSlash = 191;

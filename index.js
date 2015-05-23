@@ -1,5 +1,7 @@
+var KeyCodeShift = 16;
 var KeyCodeEsc = 27;
 var KeyCodeD = 68;
+var KeyCodeG = 71;
 var KeyCodeI = 73;
 var KeyCodeN = 78;
 var KeyCodeForwardSlash = 191;

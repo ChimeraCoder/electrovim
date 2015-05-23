@@ -154,7 +154,12 @@ function keyDownTextField(e) {
                 const message = new KeypressMessage(KeyCodeD, {});
                 self["port"].emit(message.name, message)
                 break;
-            case KeyCodeForwardSlash:
+            case KeyCodeG:
+                if(e.shiftKey){
+                    // capital G
+                    // scroll to bottom
+                    $(window).scrollTop($(document).height());
+                }
         }
     }
     catch (e){
