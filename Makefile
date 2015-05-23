@@ -6,6 +6,8 @@ xpi:
 	jpm xpi
 
 clean:
-	rm index.js
+	rm -f index.js
+	rm -f *.xpi
+
 
 .PHONY: ts
