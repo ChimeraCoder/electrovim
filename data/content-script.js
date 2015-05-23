@@ -128,10 +128,15 @@ function setMode(mode) {
 function stealFocus() {
     content.document.activeElement["blur"]();
 }
+function clearHighlights() {
+    $("body")["removeHighlight"]();
+}
 function keyDownTextField(e) {
     try {
         var keyCode = e.keyCode;
         if (keyCode === KeyCodeEsc) {
+            findBuffer = "";
+            clearHighlights();
             stealFocus();
             setMode(ModeNormal);
             return;
@@ -147,7 +152,7 @@ function keyDownTextField(e) {
             log(findBuffer);
             var body = $("body");
             content.console.log("removing highlights");
-            $("body")["removeHighlight"]();
+            clearHighlights();
             content.console.log("removed highlights");
             $("body")["highlight"](findBuffer);
             content.console.log("rehighlighted");
