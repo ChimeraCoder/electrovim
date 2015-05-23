@@ -75,6 +75,9 @@ function keyDownTextField(e) {
 
         if(keyCode === KeyCodeEsc) {
             findBuffer = "";
+            findResults = false;
+            findSelected = -1;
+
             clearHighlights();
 
             stealFocus();

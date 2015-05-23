@@ -141,6 +141,8 @@ function keyDownTextField(e) {
         var keyCode = e.keyCode;
         if (keyCode === KeyCodeEsc) {
             findBuffer = "";
+            findResults = false;
+            findSelected = -1;
             clearHighlights();
             stealFocus();
             setMode(ModeNormal);
