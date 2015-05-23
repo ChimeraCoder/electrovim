@@ -1,7 +1,9 @@
 var KeyCodeEsc = 27;
 var KeyCodeD = 68;
 var KeyCodeI = 73;
+var KeyCodeN = 78;
 var KeyCodeForwardSlash = 191;
+var KeyCodeEnter = 13;
 var KeypressListener = (function () {
     function KeypressListener(receiveMessage) {
     }

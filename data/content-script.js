@@ -1,7 +1,9 @@
 var KeyCodeEsc = 27;
 var KeyCodeD = 68;
 var KeyCodeI = 73;
+var KeyCodeN = 78;
 var KeyCodeForwardSlash = 191;
+var KeyCodeEnter = 13;
 var KeypressListener = (function () {
     function KeypressListener(receiveMessage) {
     }
@@ -45,6 +47,7 @@ var LogMessage = (function () {
 
  */
 var HighlightClass = "electrovim-highlight";
+var HighlightClassSelector = "." + HighlightClass;
 jQuery.fn.highlight = function (pat) {
     function innerHighlight(node, pat) {
         var skip = 0;
@@ -92,6 +95,8 @@ var ModeIgnore = "IGNORE";
 var ModeFind = "FIND";
 var currentMode = ModeNormal;
 var findBuffer = "";
+var findResults = false; // denotes whether we are in the middle of searching through results
+var findSelected = -1;
 function createOverlay() {
     // set the correct initial mode
     if (content.document.activeElement !== document.body) {
@@ -144,6 +149,19 @@ function keyDownTextField(e) {
         if (currentMode === ModeFind) {
             e.preventDefault();
             stealFocus();
+            if (keyCode === KeyCodeEnter) {
+                findResults = true;
+                return;
+            }
+            if (findResults) {
+                if (keyCode === KeyCodeN) {
+                    var elements = $(HighlightClassSelector);
+                    findSelected++;
+                    var selected = elements[findSelected % elements.length];
+                    scrollToElement(selected);
+                    return;
+                }
+            }
             if (!isCharPrintable(keyCode)) {
                 return;
             }
@@ -205,6 +223,9 @@ function pageup() {
 }
 function pagedown() {
     $(document).scrollTop($(document).scrollTop() + windowHeight());
+}
+function scrollToElement(element) {
+    $(document).scrollTop($(element).offset().top);
 }
 // log to extension console
 function log() {

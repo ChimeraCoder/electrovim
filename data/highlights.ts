@@ -15,6 +15,8 @@
  */
 
 const HighlightClass = "electrovim-highlight"
+const HighlightClassSelector = "." + HighlightClass;
+
 
 jQuery.fn.highlight = function(pat) {
     function innerHighlight(node, pat) {

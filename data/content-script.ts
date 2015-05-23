@@ -16,6 +16,8 @@ const ModeFind = "FIND";
 var currentMode = ModeNormal;
 
 var findBuffer : string = "";
+var findResults : boolean = false; // denotes whether we are in the middle of searching through results
+var findSelected : number = -1;
 
 function createOverlay() { 
     // set the correct initial mode
@@ -81,8 +83,25 @@ function keyDownTextField(e) {
         } 
 
         if(currentMode === ModeFind){
-            e.preventDefault()
-                stealFocus();
+            e.preventDefault();
+            stealFocus();
+
+            if(keyCode === KeyCodeEnter){
+                findResults = true;
+                return;
+            }
+
+            if(findResults) {
+                if(keyCode === KeyCodeN){
+                    const elements = $(HighlightClassSelector);
+                    findSelected++;
+                    const selected = elements[findSelected % elements.length];
+                    scrollToElement(selected);
+                    return;
+                }
+            }
+
+
             if(!isCharPrintable(keyCode)){
                 return;
             }
@@ -159,6 +178,10 @@ function pageup(){
 
 function pagedown(){
     $(document).scrollTop($(document).scrollTop()+windowHeight());
+}
+
+function scrollToElement(element : HTMLElement){
+    $(document).scrollTop($(element).offset().top)
 }
 
 // log to extension console
