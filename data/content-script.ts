@@ -1,5 +1,6 @@
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
+/// <reference path="./highlights.ts" />
 declare var content;
 declare var addMessageListener;
 declare var sendSyncMessage;

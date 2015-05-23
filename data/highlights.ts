@@ -14,6 +14,8 @@
 
  */
 
+const HighlightClass = "electrovim-highlight"
+
 jQuery.fn.highlight = function(pat) {
     function innerHighlight(node, pat) {
         var skip = 0;
@@ -22,7 +24,7 @@ jQuery.fn.highlight = function(pat) {
             pos -= (node.data.substr(0, pos).toUpperCase().length - node.data.substr(0, pos).length);
             if (pos >= 0) {
                 var spannode = document.createElement('span');
-                spannode.className = 'highlight';
+                spannode.className = HighlightClass;
                 var middlebit = node.splitText(pos);
                 var endbit = middlebit.splitText(pat.length);
                 var middleclone = middlebit.cloneNode(true);
@@ -44,17 +46,12 @@ jQuery.fn.highlight = function(pat) {
 };
 
 jQuery.fn.removeHighlight = function() {
-    return this.find("span.highlight").each(function() {
+    return this.find("span." + HighlightClass).each(function() {
         this.parentNode.firstChild.nodeName;
         const parent = this.parentNode;
         const txtContent = this.textContent;
         $(this).replaceWith(txtContent);
-        $(parent).normalize();
-        
-        with (this.parentNode) {
-            replaceChild(this.firstChild, this);
-            normalize();
-        }
+        $(parent).get()[0].normalize();
     }).end();
 };
 
