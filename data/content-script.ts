@@ -82,14 +82,19 @@ function keyDownTextField(e) {
             updateOverlay();
             log(findBuffer);
             const body = $("body");
-            // TODO highlight
+            
+
+            content.console.log("removing highlights");
+            $("body")["removeHighlight"]();
+            content.console.log("removed highlights");
+            $("body")["highlight"](findBuffer);
+            content.console.log("rehighlighted");
         }
 
         // check if in insert/ignore mode
         if(currentMode !== ModeNormal){
             return;
         }
-
 
         // i enters ignore mode
         if(keyCode===KeyCodeI){

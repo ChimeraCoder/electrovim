@@ -92,6 +92,11 @@ function keyDownTextField(e) {
             updateOverlay();
             log(findBuffer);
             var body = $("body");
+            content.console.log("removing highlights");
+            $("body")["removeHighlight"]();
+            content.console.log("removed highlights");
+            $("body")["highlight"](findBuffer);
+            content.console.log("rehighlighted");
         }
         // check if in insert/ignore mode
         if (currentMode !== ModeNormal) {
