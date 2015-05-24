@@ -15,7 +15,7 @@
    inkscape:version="0.48.5 r10040"
    width="1401"
    height="1400"
-   sodipodi:docname="lightning-bolt-145473_1280.svg">
+   sodipodi:docname="electrovim.svg">
   <metadata
      id="metadata3053">
     <rdf:RDF>
@@ -24,7 +24,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -94,17 +94,21 @@
      inkscape:window-height="820"
      id="namedview3049"
      showgrid="true"
-     inkscape:zoom="0.7375"
-     inkscape:cx="682.88552"
-     inkscape:cy="804.43208"
+     inkscape:zoom="0.36875"
+     inkscape:cx="991.19827"
+     inkscape:cy="764.20467"
      inkscape:window-x="0"
      inkscape:window-y="53"
      inkscape:window-maximized="0"
      inkscape:current-layer="svg3047"
      inkscape:object-paths="false"
-     inkscape:snap-grids="true" />
+     inkscape:snap-grids="true">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3014" />
+  </sodipodi:namedview>
   <g
-     transform="matrix(1.3931956,0,0,1.6096815,-609.44676,-229.49513)"
+     transform="matrix(3.4789535,0,0,4.0195411,-2200.0215,-1363.7723)"
      id="layer1"
      inkscape:label="Layer 1">
     <g
@@ -230,7 +234,7 @@
   </g>
   <g
      id="g4289"
-     transform="matrix(0.80042963,0,0,0.70051785,-12.252576,173.59085)">
+     transform="matrix(1.9987554,0,0,1.7492656,-708.76591,-357.22497)">
     <path
        sodipodi:nodetypes="ssccsssssssssssscscsscscccccccccccccccccccccssssss"
        inkscape:connector-curvature="0"
