@@ -29,7 +29,7 @@ var LogMessage = (function () {
             objs[_i - 0] = arguments[_i];
         }
         this.name = "log";
-        this.json = objs;
+        this.json = { "contents": objs };
     }
     return LogMessage;
 })();
@@ -173,16 +173,12 @@ function keyDownTextField(e) {
             updateOverlay();
             log(findBuffer);
             var body = $("body");
-            content.console.log("removing highlights");
             clearHighlights();
-            content.console.log("removed highlights");
             $("body")["highlight"](findBuffer);
-            content.console.log("rehighlighted");
             var highlighted = $(HighlightClassSelector);
             if (highlighted) {
                 scrollToElement(highlighted[0]);
             }
-            content.console.log("scrolled");
         }
         // check if in insert/ignore mode
         if (currentMode !== ModeNormal) {

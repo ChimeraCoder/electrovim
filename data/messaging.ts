@@ -50,10 +50,11 @@ class KeypressMessage {
 class LogMessage {
     name : string;
     sync : boolean;
-    json : Object;
+    json : {contents : any[]}
+
 
     constructor(...objs: any[]){
         this.name = "log";
-        this.json = objs;
+        this.json = {"contents" : objs};
     }
 }

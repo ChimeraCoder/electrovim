@@ -29,7 +29,7 @@ var LogMessage = (function () {
             objs[_i - 0] = arguments[_i];
         }
         this.name = "log";
-        this.json = objs;
+        this.json = { "contents": objs };
     }
     return LogMessage;
 })();
@@ -116,7 +116,8 @@ pageMod.PageMod({
             closeTab(tab, message);
         });
         worker.port.on("log", function (message) {
-            console.log(message.json);
+            var tabIndex = worker.tab ? worker.tab.index : -1;
+            console.log.apply(console, ["(tab", tabIndex, "):"].concat(message.json.contents));
         });
     }
 });

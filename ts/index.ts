@@ -94,7 +94,8 @@ pageMod.PageMod({
         });
 
         worker.port.on("log", (message : LogMessage) => {
-            console.log(message.json);
+            const tabIndex = worker.tab ? worker.tab.index : -1;
+            console.log("(tab", tabIndex, "):", ...message.json.contents);
         });
     }
 });
