@@ -119,6 +119,11 @@ function keyDownTextField(e) {
             content.console.log("removed highlights");
             $("body")["highlight"](findBuffer);
             content.console.log("rehighlighted");
+            const highlighted = $(HighlightClassSelector);
+            if(highlighted){
+                scrollToElement(highlighted[0]);
+            }
+            content.console.log("scrolled");
         }
 
         // check if in insert/ignore mode
