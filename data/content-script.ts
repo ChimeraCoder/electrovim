@@ -91,6 +91,7 @@ function keyDownTextField(e) {
 
             if(keyCode === KeyCodeEnter){
                 findResults = true;
+                $("body")["highlight"](findBuffer, -1);
                 return;
             }
 
@@ -115,9 +116,9 @@ function keyDownTextField(e) {
             
 
             clearHighlights();
-            $("body")["highlight"](findBuffer);
+            $("body")["highlight"](findBuffer, 1);
             const highlighted = $(HighlightClassSelector);
-            if(highlighted){
+            if(highlighted[0]){
                 scrollToElement(highlighted[0]);
             }
         }

@@ -50,32 +50,42 @@ var LogMessage = (function () {
  */
 var HighlightClass = "electrovim-highlight";
 var HighlightClassSelector = "." + HighlightClass;
-jQuery.fn.highlight = function (pat) {
-    function innerHighlight(node, pat) {
+var ELEMENT_NODE = 1;
+var TEXT_NODE = 3;
+jQuery.fn.highlight = function (pattern, max) {
+    var highlighted = 0;
+    function innerHighlight(node, pattern) {
+        if (max >= 0 && highlighted >= max) {
+            return 0;
+        }
         var skip = 0;
-        if (node.nodeType == 3) {
-            var pos = node.data.toUpperCase().indexOf(pat);
+        if (node.nodeType == TEXT_NODE) {
+            var pos = node.data.toUpperCase().indexOf(pattern);
             pos -= (node.data.substr(0, pos).toUpperCase().length - node.data.substr(0, pos).length);
             if (pos >= 0) {
                 var spannode = document.createElement('span');
                 spannode.className = HighlightClass;
                 var middlebit = node.splitText(pos);
-                var endbit = middlebit.splitText(pat.length);
+                var endbit = middlebit.splitText(pattern.length);
                 var middleclone = middlebit.cloneNode(true);
                 spannode.appendChild(middleclone);
                 middlebit.parentNode.replaceChild(spannode, middlebit);
                 skip = 1;
             }
         }
-        else if (node.nodeType == 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+        else if (node.nodeType == ELEMENT_NODE && node.childNodes && !/(script|style)/i.test(node.tagName)) {
             for (var i = 0; i < node.childNodes.length; ++i) {
-                i += innerHighlight(node.childNodes[i], pat);
+                i += innerHighlight(node.childNodes[i], pattern);
             }
         }
+        highlighted += skip;
         return skip;
     }
-    return this.length && pat && pat.length ? this.each(function () {
-        innerHighlight(this, pat.toUpperCase());
+    return this.length && pattern && pattern.length ? this.each(function () {
+        if (max >= 0 && highlighted >= max) {
+            return;
+        }
+        innerHighlight(this, pattern.toUpperCase());
     }) : this;
 };
 jQuery.fn.removeHighlight = function () {
@@ -155,6 +165,7 @@ function keyDownTextField(e) {
             stealFocus();
             if (keyCode === KeyCodeEnter) {
                 findResults = true;
+                $("body")["highlight"](findBuffer, -1);
                 return;
             }
             if (findResults) {
@@ -174,9 +185,9 @@ function keyDownTextField(e) {
             log(findBuffer);
             var body = $("body");
             clearHighlights();
-            $("body")["highlight"](findBuffer);
+            $("body")["highlight"](findBuffer, 1);
             var highlighted = $(HighlightClassSelector);
-            if (highlighted) {
+            if (highlighted[0]) {
                 scrollToElement(highlighted[0]);
             }
         }
