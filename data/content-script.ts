@@ -7,6 +7,8 @@ declare var sendSyncMessage;
 declare var sendAsyncMessage;
 
 const OverlayId = "electrovim-overlay";
+const OverlayModeId = "electrovim-overlay-mode";
+const SearchInputId = "electrovim-find";
 
 const ModeInsert = "INSERT";
 const ModeNormal = "NORMAL";
@@ -28,15 +30,18 @@ function createOverlay() {
     // check if an overlay already exists
     if(content.document.getElementById(OverlayId)){
         updateOverlay();
-        return
+        return;
     }
 
 
     // create a new div element 
     // and give it some content 
     const newDiv = content.document.createElement("div"); 
+    const newSpan = content.document.createElement("span"); 
     const newContent = content.document.createTextNode(currentMode); 
-    newDiv.appendChild(newContent); //add the text node to the newly created div. 
+    newSpan.id = OverlayModeId;
+    newSpan.appendChild(newContent); //add the text node to the newly created div. 
+    newDiv.appendChild(newSpan);
     newDiv.id = OverlayId;
 
     // add the newly created element and its content into the DOM 
@@ -44,17 +49,52 @@ function createOverlay() {
 }
 
 function updateOverlay(){
-    let elem = content.document.getElementById(OverlayId);
-    if(currentMode !== ModeFind){
-        elem.textContent= currentMode;
-    } else {
-        elem.textContent= currentMode + ": " + findBuffer;
+    let elem = content.document.getElementById(OverlayModeId);
+    elem.textContent= currentMode;
+}
+
+
+// create the search input field
+// or reset it if already present
+function createSearchField(){
+    removeSearchField();
+    const inputNode = content.document.createElement("input"); 
+    const overlay = content.document.getElementById(OverlayId);
+    inputNode.setAttribute("type", "search");
+
+    inputNode.id = SearchInputId;
+    inputNode.onsubmit = submitSearch;
+    overlay.appendChild(inputNode);
+
+    // add the newly created element and its content into the DOM 
+}
+
+function removeSearchField(){
+    let e = document.getElementById(SearchInputId);
+    if(e){
+        e.parentNode.removeChild(e);
     }
+}
+
+function focusSearchField(){
+    document.getElementById(SearchInputId).focus();
 }
 
 function setMode(mode : string){
     currentMode = mode;
     updateOverlay();
+}
+
+function submitSearch(e){
+    e.preventDefault();
+    const searchField =  (<HTMLInputElement>document.getElementById(SearchInputId));
+    findBuffer = searchField.value;
+    console.log("submitting search: ", findBuffer);
+    findResults = true;
+    searchField.disabled = true;
+    stealFocus();
+    $("body")["highlight"](findBuffer, -1);
+
 }
 
 // remove focus from the active element
@@ -86,15 +126,6 @@ function keyDownTextField(e) {
         } 
 
         if(currentMode === ModeFind){
-            e.preventDefault();
-            stealFocus();
-
-            if(keyCode === KeyCodeEnter){
-                findResults = true;
-                $("body")["highlight"](findBuffer, -1);
-                return;
-            }
-
             if(findResults) {
                 if(keyCode === KeyCodeN){
                     const elements = $(HighlightClassSelector);
@@ -105,6 +136,12 @@ function keyDownTextField(e) {
                 }
             }
 
+            focusSearchField();
+
+            if(keyCode === KeyCodeEnter){
+                submitSearch(e);
+                return;
+            }
 
             if(!isCharPrintable(keyCode)){
                 return;
@@ -132,8 +169,10 @@ function keyDownTextField(e) {
         if(keyCode === KeyCodeForwardSlash){
             setMode(ModeFind);
             findBuffer = "";
-            e.preventDefault()
-                return;
+            e.preventDefault();
+            createSearchField();
+            focusSearchField();
+            return;
         }
 
         // i enters ignore mode

@@ -101,6 +101,8 @@ jQuery.fn.removeHighlight = function () {
 /// <reference path="./messaging.ts" />
 /// <reference path="./highlights.ts" />
 var OverlayId = "electrovim-overlay";
+var OverlayModeId = "electrovim-overlay-mode";
+var SearchInputId = "electrovim-find";
 var ModeInsert = "INSERT";
 var ModeNormal = "NORMAL";
 var ModeIgnore = "IGNORE";
@@ -122,24 +124,53 @@ function createOverlay() {
     // create a new div element 
     // and give it some content 
     var newDiv = content.document.createElement("div");
+    var newSpan = content.document.createElement("span");
     var newContent = content.document.createTextNode(currentMode);
-    newDiv.appendChild(newContent); //add the text node to the newly created div. 
+    newSpan.id = OverlayModeId;
+    newSpan.appendChild(newContent); //add the text node to the newly created div. 
+    newDiv.appendChild(newSpan);
     newDiv.id = OverlayId;
     // add the newly created element and its content into the DOM 
     content.document.body.appendChild(newDiv);
 }
 function updateOverlay() {
-    var elem = content.document.getElementById(OverlayId);
-    if (currentMode !== ModeFind) {
-        elem.textContent = currentMode;
+    var elem = content.document.getElementById(OverlayModeId);
+    elem.textContent = currentMode;
+}
+// create the search input field
+// or reset it if already present
+function createSearchField() {
+    removeSearchField();
+    var inputNode = content.document.createElement("input");
+    var overlay = content.document.getElementById(OverlayId);
+    inputNode.setAttribute("type", "search");
+    inputNode.id = SearchInputId;
+    inputNode.onsubmit = submitSearch;
+    overlay.appendChild(inputNode);
+    // add the newly created element and its content into the DOM 
+}
+function removeSearchField() {
+    var e = document.getElementById(SearchInputId);
+    if (e) {
+        e.parentNode.removeChild(e);
     }
-    else {
-        elem.textContent = currentMode + ": " + findBuffer;
-    }
+}
+function focusSearchField() {
+    document.getElementById(SearchInputId).focus();
 }
 function setMode(mode) {
     currentMode = mode;
     updateOverlay();
+}
+function submitSearch(e) {
+    e.preventDefault();
+    var searchField = document.getElementById(SearchInputId);
+    findBuffer = searchField.value;
+    console.log("submitting search: ", findBuffer);
+    findResults = true;
+    searchField.disabled = true;
+    stealFocus();
+    $("body")["highlight"](findBuffer, -1);
 }
 // remove focus from the active element
 function stealFocus() {
@@ -161,13 +192,6 @@ function keyDownTextField(e) {
             return;
         }
         if (currentMode === ModeFind) {
-            e.preventDefault();
-            stealFocus();
-            if (keyCode === KeyCodeEnter) {
-                findResults = true;
-                $("body")["highlight"](findBuffer, -1);
-                return;
-            }
             if (findResults) {
                 if (keyCode === KeyCodeN) {
                     var elements = $(HighlightClassSelector);
@@ -176,6 +200,11 @@ function keyDownTextField(e) {
                     scrollToElement(selected);
                     return;
                 }
+            }
+            focusSearchField();
+            if (keyCode === KeyCodeEnter) {
+                submitSearch(e);
+                return;
             }
             if (!isCharPrintable(keyCode)) {
                 return;
@@ -200,6 +229,8 @@ function keyDownTextField(e) {
             setMode(ModeFind);
             findBuffer = "";
             e.preventDefault();
+            createSearchField();
+            focusSearchField();
             return;
         }
         // i enters ignore mode

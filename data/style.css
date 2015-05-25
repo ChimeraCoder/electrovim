@@ -9,7 +9,13 @@
     color: black;
 }
 
+#electrovim-overlay input {
+    background-color: transparent;
+    border: 0px solid;
+    margin-left: 5px;
+}
 
 .electrovim-highlight {
     background-color: yellow;
 }
+
