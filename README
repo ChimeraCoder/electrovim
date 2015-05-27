@@ -1,7 +1,7 @@
 Electrovim
 ===============
 
-![](https://raw.githubusercontent.com/ChimeraCoder/electrovim/master/electrovim-128.png)
+![](https://raw.githubusercontent.com/ChimeraCoder/electrovim/master/data/icons/electrovim-128.png)
 
 
 Electrovim adds Vim keybindings to Firefox. It supports multiprocess mode (also known as [electrolysis](https://wiki.mozilla.org/Electrolysis) or e10s). 
