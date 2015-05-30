@@ -276,6 +276,10 @@ var _CommandBuffer = (function () {
                 return scrollToBottom;
             case "gg":
                 return scrollToTop;
+            case "H":
+                return historyBack;
+            case "L":
+                return historyForward;
         }
     };
     return _CommandBuffer;
@@ -289,6 +293,12 @@ function scrollToBottom() {
 }
 function scrollToTop() {
     $(window).scrollTop(0);
+}
+function historyBack() {
+    content.window.history.back();
+}
+function historyForward() {
+    content.window.history.forward();
 }
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
@@ -331,6 +341,10 @@ function createOverlay() {
 }
 function updateOverlay() {
     var elem = content.document.getElementById(OverlayModeId);
+    if (elem === null) {
+        content.console.log("error updating overlay - no element found");
+        return;
+    }
     elem.textContent = currentMode;
 }
 // create the search input field
@@ -359,7 +373,9 @@ function setMode(mode) {
     if (mode !== ModeFind) {
         var overlay = document.getElementById(OverlayId);
         var inputNode = document.getElementById(SearchInputId);
-        overlay.removeChild(inputNode);
+        if (inputNode !== null) {
+            overlay.removeChild(inputNode);
+        }
     }
     updateOverlay();
 }
@@ -367,7 +383,6 @@ function submitSearch(e) {
     e.preventDefault();
     var searchField = document.getElementById(SearchInputId);
     findBuffer = searchField.value;
-    console.log("submitting search: ", findBuffer);
     findResults = true;
     searchField.disabled = true;
     stealFocus();

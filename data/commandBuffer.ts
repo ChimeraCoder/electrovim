@@ -38,6 +38,10 @@ class _CommandBuffer {
                 return scrollToBottom;
             case "gg":
                 return scrollToTop;
+            case "H":
+                return historyBack;
+            case "L":
+                return historyForward;
         }
     }
 }
@@ -56,4 +60,10 @@ function scrollToTop(){
     $(window).scrollTop(0);
 }
 
+function historyBack(){
+    content.window.history.back();
+}
 
+function historyForward(){
+    content.window.history.forward();
+}
