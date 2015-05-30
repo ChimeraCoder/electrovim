@@ -107,6 +107,7 @@ var ModeInsert = "INSERT";
 var ModeNormal = "NORMAL";
 var ModeIgnore = "IGNORE";
 var ModeFind = "FIND";
+var CurrentFindClass = "electrovim-current-find";
 var currentMode = ModeNormal;
 var findBuffer = "";
 var findResults = false; // denotes whether we are in the middle of searching through results
@@ -196,8 +197,10 @@ function keyDownTextField(e) {
                 if (keyCode === KeyCodeN) {
                     var elements = $(HighlightClassSelector);
                     findSelected++;
+                    $("." + CurrentFindClass).removeClass(CurrentFindClass);
                     var selected = elements[findSelected % elements.length];
                     scrollToElement(selected);
+                    $(selected).addClass(CurrentFindClass);
                     return;
                 }
             }

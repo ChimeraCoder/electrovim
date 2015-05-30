@@ -19,3 +19,6 @@
     background-color: yellow;
 }
 
+.electrovim-current-find {
+    background-color: hsl(169, 100%, 50%);
+}

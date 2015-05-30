@@ -15,6 +15,8 @@ const ModeNormal = "NORMAL";
 const ModeIgnore = "IGNORE";
 const ModeFind = "FIND";
 
+const CurrentFindClass = "electrovim-current-find";
+
 var currentMode = ModeNormal;
 
 var findBuffer : string = "";
@@ -130,8 +132,10 @@ function keyDownTextField(e) {
                 if(keyCode === KeyCodeN){
                     const elements = $(HighlightClassSelector);
                     findSelected++;
+                    $("." + CurrentFindClass).removeClass(CurrentFindClass);
                     const selected = elements[findSelected % elements.length];
                     scrollToElement(selected);
+                    $(selected).addClass(CurrentFindClass);
                     return;
                 }
             }
