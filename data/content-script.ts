@@ -84,6 +84,11 @@ function focusSearchField(){
 
 function setMode(mode : string){
     currentMode = mode;
+    if(mode !== ModeFind){
+        const overlay = document.getElementById(OverlayId);
+        const inputNode = document.getElementById(SearchInputId);
+        overlay.removeChild(inputNode);
+    }
     updateOverlay();
 }
 

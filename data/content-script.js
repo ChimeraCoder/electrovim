@@ -161,6 +161,11 @@ function focusSearchField() {
 }
 function setMode(mode) {
     currentMode = mode;
+    if (mode !== ModeFind) {
+        var overlay = document.getElementById(OverlayId);
+        var inputNode = document.getElementById(SearchInputId);
+        overlay.removeChild(inputNode);
+    }
     updateOverlay();
 }
 function submitSearch(e) {
