@@ -55,6 +55,10 @@ function createOverlay() {
 
 function updateOverlay(){
     let elem = content.document.getElementById(OverlayModeId);
+    if(elem === null){
+        content.console.log("error updating overlay - no element found");
+        return;
+    }
     elem.textContent= currentMode;
 }
 
@@ -90,7 +94,9 @@ function setMode(mode : string){
     if(mode !== ModeFind){
         const overlay = document.getElementById(OverlayId);
         const inputNode = document.getElementById(SearchInputId);
-        overlay.removeChild(inputNode);
+        if(inputNode !== null){
+            overlay.removeChild(inputNode);
+        }
     }
     updateOverlay();
 }
@@ -99,7 +105,6 @@ function submitSearch(e){
     e.preventDefault();
     const searchField =  (<HTMLInputElement>document.getElementById(SearchInputId));
     findBuffer = searchField.value;
-    console.log("submitting search: ", findBuffer);
     findResults = true;
     searchField.disabled = true;
     stealFocus();
