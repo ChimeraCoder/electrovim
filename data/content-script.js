@@ -97,9 +97,203 @@ jQuery.fn.removeHighlight = function () {
         $(parent).get()[0].normalize();
     }).end();
 };
+/* MIT license
+ * https://github.com/timoxley/keycode/blob/master/index.js
+ */
+var KeyCodeByName = {
+    'backspace': 8,
+    'tab': 9,
+    'enter': 13,
+    'shift': 16,
+    'ctrl': 17,
+    'alt': 18,
+    'pause/break': 19,
+    'caps lock': 20,
+    'esc': 27,
+    'space': 32,
+    'page up': 33,
+    'page down': 34,
+    'end': 35,
+    'home': 36,
+    'left': 37,
+    'up': 38,
+    'right': 39,
+    'down': 40,
+    'insert': 45,
+    'delete': 46,
+    'command': 91,
+    'right click': 93,
+    'numpad *': 106,
+    'numpad +': 107,
+    'numpad -': 109,
+    'numpad .': 110,
+    'numpad /': 111,
+    'num lock': 144,
+    'scroll lock': 145,
+    'my computer': 182,
+    'my calculator': 183,
+    ';': 186,
+    '=': 187,
+    ',': 188,
+    '-': 189,
+    '.': 190,
+    '/': 191,
+    '`': 192,
+    '[': 219,
+    '\\': 220,
+    ']': 221,
+    "'": 222,
+    "a": 65,
+    "b": 66,
+    "c": 67,
+    "d": 68,
+    "e": 69,
+    "f": 70,
+    "g": 71,
+    "h": 72,
+    "i": 73,
+    "j": 74,
+    "k": 75,
+    "l": 76,
+    "m": 77,
+    "n": 78,
+    "o": 79,
+    "p": 80,
+    "q": 81,
+    "r": 82,
+    "s": 83,
+    "t": 84,
+    "u": 85,
+    "v": 86,
+    "w": 87,
+    "x": 88,
+    "y": 89,
+    "z": 90
+};
+var KeyNameByCode = {
+    8: 'backspace',
+    9: 'tab',
+    13: 'enter',
+    16: 'shift',
+    17: 'ctrl',
+    18: 'alt',
+    19: 'pause/break',
+    20: 'caps lock',
+    27: 'esc',
+    32: 'space',
+    33: 'page up',
+    34: 'page down',
+    35: 'end',
+    36: 'home',
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down',
+    45: 'insert',
+    46: 'delete',
+    65: "a",
+    66: "b",
+    67: "c",
+    68: "d",
+    69: "e",
+    70: "f",
+    71: "g",
+    72: "h",
+    73: "i",
+    74: "j",
+    75: "k",
+    76: "l",
+    77: "m",
+    78: "n",
+    79: "o",
+    80: "p",
+    81: "q",
+    82: "r",
+    83: "s",
+    84: "t",
+    85: "u",
+    86: "v",
+    87: "w",
+    88: "x",
+    89: "y",
+    90: "z",
+    91: 'command',
+    93: 'right click',
+    106: 'numpad *',
+    107: 'numpad +',
+    109: 'numpad -',
+    110: 'numpad .',
+    111: 'numpad /',
+    144: 'num lock',
+    145: 'scroll lock',
+    182: 'my computer',
+    183: 'my calculator',
+    186: ';',
+    187: '=',
+    188: ',',
+    189: '-',
+    190: '.',
+    191: '/',
+    192: '`',
+    219: '[',
+    220: '\\',
+    221: ']',
+    222: "'",
+};
+function isAlphaNumeric(keyCode) {
+    return (keyCode >= 65 && keyCode <= 90);
+}
+/// <reference path="./keycodes.ts" />
+var _CommandBuffer = (function () {
+    function _CommandBuffer() {
+        this.reset();
+    }
+    _CommandBuffer.prototype.reset = function () {
+        this.buffer = [];
+    };
+    _CommandBuffer.prototype.add = function (e) {
+        var keyCode = e.keyCode;
+        if (e.keyCode === KeyCodeShift) {
+            return false;
+        }
+        var key = KeyNameByCode[keyCode];
+        if (e.shiftKey && isAlphaNumeric(keyCode)) {
+            key = key.toUpperCase();
+        }
+        this.buffer.push(key);
+        return this.canExecute();
+    };
+    _CommandBuffer.prototype.canExecute = function () {
+        return (this.parseBuffer() !== null);
+    };
+    _CommandBuffer.prototype.parseBuffer = function () {
+        // TODO replace this with a proper parser
+        var command = this.buffer.join("");
+        switch (command) {
+            case "d":
+                return sendTabCloseEvent;
+            case "G":
+                return scrollToBottom;
+            case "gg":
+                return scrollToTop;
+        }
+    };
+    return _CommandBuffer;
+})();
+function sendTabCloseEvent() {
+    var message = new KeypressMessage(KeyCodeD, {});
+    self["port"].emit(message.name, message);
+}
+function scrollToBottom() {
+    $(window).scrollTop($(document).height());
+}
+function scrollToTop() {
+    $(window).scrollTop(0);
+}
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
 /// <reference path="./highlights.ts" />
+/// <reference path="./commandBuffer.ts" />
 var OverlayId = "electrovim-overlay";
 var OverlayModeId = "electrovim-overlay-mode";
 var SearchInputId = "electrovim-find";
@@ -108,6 +302,7 @@ var ModeNormal = "NORMAL";
 var ModeIgnore = "IGNORE";
 var ModeFind = "FIND";
 var CurrentFindClass = "electrovim-current-find";
+var CommandBuffer = new _CommandBuffer();
 var currentMode = ModeNormal;
 var findBuffer = "";
 var findResults = false; // denotes whether we are in the middle of searching through results
@@ -200,7 +395,13 @@ function clearHighlights() {
 function keyDownTextField(e) {
     try {
         var keyCode = e.keyCode;
+        if (keyCode === KeyCodeShift) {
+            return;
+        }
+        // From any mode, Escape always resets everything
+        // and drops the user back in normal mode
         if (keyCode === KeyCodeEsc) {
+            CommandBuffer.reset();
             findBuffer = "";
             findResults = false;
             findSelected = -1;
@@ -265,6 +466,15 @@ function keyDownTextField(e) {
             }
             return;
         }
+        // add the key to command buffer and check if we can execute
+        // a command
+        var canExecute = CommandBuffer.add(e);
+        if (canExecute) {
+            var action = CommandBuffer.parseBuffer();
+            action();
+            CommandBuffer.reset();
+        }
+        return;
         switch (keyCode) {
             case KeyCodeD:
                 var message = new KeypressMessage(KeyCodeD, {});

@@ -1,6 +1,7 @@
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
 /// <reference path="./highlights.ts" />
+/// <reference path="./commandBuffer.ts" />
 declare var content;
 declare var addMessageListener;
 declare var sendSyncMessage;
@@ -16,6 +17,8 @@ const ModeIgnore = "IGNORE";
 const ModeFind = "FIND";
 
 const CurrentFindClass = "electrovim-current-find";
+
+const CommandBuffer = new _CommandBuffer();
 
 var currentMode = ModeNormal;
 
@@ -133,8 +136,16 @@ function clearHighlights(){
 function keyDownTextField(e) {
     try{
         const keyCode = e.keyCode;
+        if(keyCode === KeyCodeShift){
+            return;
+        }
 
+        // From any mode, Escape always resets everything
+        // and drops the user back in normal mode
         if(keyCode === KeyCodeEsc) {
+            CommandBuffer.reset();
+
+
             findBuffer = "";
             findResults = false;
             findSelected = -1;
@@ -212,6 +223,17 @@ function keyDownTextField(e) {
             return;
         }
 
+
+        // add the key to command buffer and check if we can execute
+        // a command
+        const canExecute = CommandBuffer.add(e);
+        if(canExecute){
+            const action = CommandBuffer.parseBuffer();
+            action();
+            CommandBuffer.reset();
+        }
+
+        return;
 
         switch (keyCode){
             case KeyCodeD:
