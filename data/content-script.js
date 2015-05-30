@@ -171,7 +171,19 @@ function submitSearch(e) {
     findResults = true;
     searchField.disabled = true;
     stealFocus();
+    findSelected = -1;
+    highlightAndCenter();
+}
+function highlightAndCenter() {
+    clearHighlights();
     $("body")["highlight"](findBuffer, -1);
+    var elements = $(HighlightClassSelector);
+    findSelected++;
+    $("." + CurrentFindClass).removeClass(CurrentFindClass);
+    var selected = elements[findSelected % elements.length];
+    scrollToElement(selected);
+    $(selected).addClass(CurrentFindClass);
+    return;
 }
 // remove focus from the active element
 function stealFocus() {
