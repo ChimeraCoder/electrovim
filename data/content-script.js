@@ -280,6 +280,10 @@ var _CommandBuffer = (function () {
                 return historyBack;
             case "L":
                 return historyForward;
+            case "j":
+                return scrollDown;
+            case "k":
+                return scrollUp;
         }
     };
     return _CommandBuffer;
@@ -299,6 +303,14 @@ function historyBack() {
 }
 function historyForward() {
     content.window.history.forward();
+}
+function scrollDown() {
+    var numPixels = 60;
+    $(window).scrollTop($(document).scrollTop() + numPixels);
+}
+function scrollUp() {
+    var numPixels = 60;
+    $(window).scrollTop($(document).scrollTop() - numPixels);
 }
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />

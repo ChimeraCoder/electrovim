@@ -42,6 +42,10 @@ class _CommandBuffer {
                 return historyBack;
             case "L":
                 return historyForward;
+            case "j":
+                return scrollDown;
+            case "k":
+                return scrollUp;
         }
     }
 }
@@ -66,4 +70,14 @@ function historyBack(){
 
 function historyForward(){
     content.window.history.forward();
+}
+
+function scrollDown(){
+    const numPixels = 60;
+    $(window).scrollTop($(document).scrollTop() + numPixels);
+}
+
+function scrollUp(){
+    const numPixels = 60;
+    $(window).scrollTop($(document).scrollTop() - numPixels);
 }
