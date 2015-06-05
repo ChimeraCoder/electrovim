@@ -74,10 +74,14 @@ function historyForward(){
 
 function scrollDown(){
     const numPixels = 60;
-    $(window).scrollTop($(document).scrollTop() + numPixels);
+    const time = 100;
+    const loc = $(document).scrollTop() + numPixels
+    $('html,body').animate({scrollTop:loc},time);
 }
 
 function scrollUp(){
-    const numPixels = 60;
-    $(window).scrollTop($(document).scrollTop() - numPixels);
+    const numPixels = -60;
+    const time = 100;
+    const loc = $(document).scrollTop() + numPixels
+    $('html,body').animate({scrollTop:loc},time);
 }
