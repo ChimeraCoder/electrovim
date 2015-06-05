@@ -306,15 +306,16 @@ function historyForward() {
 }
 function scrollDown() {
     var numPixels = 60;
-    var time = 100;
-    var loc = $(document).scrollTop() + numPixels;
-    $('html,body').animate({ scrollTop: loc }, time);
+    animateScroll(numPixels);
 }
 function scrollUp() {
     var numPixels = -60;
-    var time = 100;
+    animateScroll(numPixels);
+}
+function animateScroll(numPixels, duration) {
+    if (duration === void 0) { duration = 100; }
     var loc = $(document).scrollTop() + numPixels;
-    $('html,body').animate({ scrollTop: loc }, time);
+    $('html,body').animate({ scrollTop: loc }, duration);
 }
 /// <reference path="./jquery.d.ts" />
 /// <reference path="./messaging.ts" />
