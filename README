@@ -9,8 +9,9 @@ Electrovim adds Vim keybindings to Firefox. It supports multiprocess mode (also 
 
 ### Installation
 
-Electrovim can be installed from the [Firefox Add-ons marketplace](https://addons.mozilla.org/en-US/firefox/addon/electrovim/)
+Electrovim can be installed from the [Firefox Add-ons marketplace](https://addons.mozilla.org/en-US/firefox/addon/electrovim/).
 
+Upon installation, Electrovim will be available from any new tabs opened. Tabs that were open when Electrovim were installed for the first time may need to be refreshed.
 
 
 ### Usage
@@ -21,5 +22,22 @@ The current mode (normal or insert) is shown on the bottom right of the window. 
 When in normal mode, use `d` to close the current tab. `CTRL+n` and `CTRL+p` switch to the next and previous tab, respectively. `CTRL+f` and `CTRL+b` are the equivalent of page up/page down.
 
 
-Support for other Vim commands is forthcoming.
+Command       | Action
+------------- | -------------
+d | Closes tab
+j | Scroll down
+k | Scroll up
+/ | Enter find mode
+H | Go back in browser history
+L | Go forward in browser history
+gg | Scroll to top of page
+G | Scroll to bottom of page
+CTRL + b | Page up
+CTRL + f | Page down
+CTRL + n | Switch to the next tab
+CTRL + p | Switch to the previous tab
 
+
+#### Find mode
+
+Press `/` to enter find mode and begin typing text to search the current page. Electrovim automatically highlights the first match (if any). To find subsequent matches, press `Enter` to complete the search and press `n` to iterate through all matches.
